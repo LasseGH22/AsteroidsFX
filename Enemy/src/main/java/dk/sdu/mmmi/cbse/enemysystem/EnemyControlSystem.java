@@ -1,4 +1,4 @@
-package dk.sdu.mmmi.cbse.playersystem;
+package dk.sdu.mmmi.cbse.enemysystem;
 
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
@@ -13,17 +13,17 @@ import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
 
 
-public class PlayerControlSystem implements IEntityProcessingService {
+public class EnemyControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-            
-        for (Entity player : world.getEntities(Player.class)) {
+
+        for (Entity player : world.getEntities(Enemy.class)) {
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
-                player.setRotation(player.getRotation() - 5);                
+                player.setRotation(player.getRotation() - 5);
             }
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
-                player.setRotation(player.getRotation() + 5);                
+                player.setRotation(player.getRotation() + 5);
             }
             if (gameData.getKeys().isDown(GameKeys.UP)) {
                 double changeX = Math.cos(Math.toRadians(player.getRotation()));
@@ -37,24 +37,24 @@ public class PlayerControlSystem implements IEntityProcessingService {
                     world.addEntity(bullet);
                 }
             }
-            
-        if (player.getX() < 0) {
-            player.setX(1);
-        }
 
-        if (player.getX() > gameData.getDisplayWidth()) {
-            player.setX(gameData.getDisplayWidth()-1);
-        }
+            if (player.getX() < 0) {
+                player.setX(1);
+            }
 
-        if (player.getY() < 0) {
-            player.setY(1);
-        }
+            if (player.getX() > gameData.getDisplayWidth()) {
+                player.setX(gameData.getDisplayWidth()-1);
+            }
 
-        if (player.getY() > gameData.getDisplayHeight()) {
-            player.setY(gameData.getDisplayHeight()-1);
-        }
-            
-                                        
+            if (player.getY() < 0) {
+                player.setY(1);
+            }
+
+            if (player.getY() > gameData.getDisplayHeight()) {
+                player.setY(gameData.getDisplayHeight()-1);
+            }
+
+
         }
     }
 
