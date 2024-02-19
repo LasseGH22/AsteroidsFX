@@ -20,6 +20,8 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
 
         for (Entity enemy : world.getEntities(Enemy.class)) {
+
+            // Right & Left
             if (Math.random() > 0.8) {
                 if (Math.random() > 0.5) {
                     enemy.setRotation(enemy.getRotation() - 10);
@@ -28,23 +30,21 @@ public class EnemyControlSystem implements IEntityProcessingService {
                 }
             }
 
-
-
-
+            // Constant forward movement
             double changeX = Math.cos(Math.toRadians(enemy.getRotation()));
             double changeY = Math.sin(Math.toRadians(enemy.getRotation()));
             enemy.setX(enemy.getX() + changeX);
             enemy.setY(enemy.getY() + changeY);
 
-
+            // Bullet
             if (Math.random() > 0.975) {
-                System.out.println(Math.random());
                 for (BulletSPI bulletSPI : getBulletSPIs()) {
                     Entity bullet = bulletSPI.createBullet(enemy,gameData);
                     world.addEntity(bullet);
                 }
             }
 
+            // Arena collision
             if (enemy.getX() > gameData.getDisplayWidth() || enemy.getX() + gameData.getDisplayWidth() < gameData.getDisplayWidth()) {
                 enemy.setRotation(enemy.getRotation() + 180);
             }
