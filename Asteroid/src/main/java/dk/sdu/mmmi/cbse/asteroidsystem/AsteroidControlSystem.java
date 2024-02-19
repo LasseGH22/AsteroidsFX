@@ -25,30 +25,18 @@ public class AsteroidControlSystem implements IEntityProcessingService {
     private Entity createAsteroid(GameData gameData) {
         Entity asteroid = new Asteroid();
 
-        double size = 10; // Example radius
-        double centerX = 5;
-        double centerY = 5;
+        setAsteroidShape(asteroid); // Generate semi random shape for the asteroid
+        setSpawnLocation(asteroid,gameData); // Generate coordinates for spawn location of asteroid
 
-        // Calculate points of asteroid
-        double[][] points = new double[5][2];
-        for (int i = 0; i < 5; i++) {
-            double angle = Math.toRadians(72 * i - 90);
-            points[i][0] = centerX + size * Math.cos(angle) + random.nextInt(0,20);
-            points[i][1] = centerY + size * Math.sin(angle) + random.nextInt(0,20);
-        }
+        return asteroid;
+    }
 
-        // Set coordinates of asteroid polygon from the randomly semi randomly generated values
-        asteroid.setPolygonCoordinates(
-                points[0][0], points[0][1],
-                points[1][0], points[1][1],
-                points[2][0], points[2][1],
-                points[3][0], points[3][1],
-                points[4][0], points[4][1]);
+    private void setSpawnLocation(Entity asteroid,GameData gameData) {
 
-        // Generate coordinates for spawn location of asteroid
         int asteroidSpawnX = random.nextInt(gameData.getDisplayWidth());
         int asteroidSpawnY = random.nextInt(gameData.getDisplayHeight());
-        if (random.nextInt(3) > 1) {
+
+        if (random.nextInt(0,3) == 1) {
 
             // Top
             if (asteroidSpawnX > asteroidSpawnY) {
@@ -79,7 +67,25 @@ public class AsteroidControlSystem implements IEntityProcessingService {
                 asteroid.setRotation(270 - random.nextInt(0,180));
             }
         }
+    }
 
-        return asteroid;
+    private void setAsteroidShape(Entity asteroid) {
+        double size = random.nextInt(15,25);
+
+        // Calculate points of asteroid
+        double[][] points = new double[5][2];
+        for (int i = 0; i < 5; i++) {
+            double angle = Math.toRadians(72 * i - 90);
+            points[i][0] = size * Math.cos(angle) + random.nextInt(10,25);
+            points[i][1] = size * Math.sin(angle) + random.nextInt(10,25);
+        }
+
+        // Set coordinates of asteroid polygon from the randomly semi randomly generated values
+        asteroid.setPolygonCoordinates(
+                points[0][0], points[0][1],
+                points[1][0], points[1][1],
+                points[2][0], points[2][1],
+                points[3][0], points[3][1],
+                points[4][0], points[4][1]);
     }
 }
