@@ -4,7 +4,6 @@ import dk.sdu.mmmi.cbse.common.bullet.Bullet;
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
-import dk.sdu.mmmi.cbse.common.data.GameKeys;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
@@ -33,7 +32,21 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         setShape(bullet);
         bullet.setX(shooter.getX());
         bullet.setY(shooter.getY());
-        bullet.setRotation(shooter.getRotation());
+
+        switch (shooter.getName()) {
+
+            case ("enemy"):
+                bullet.setRotation(shooter.getRotation());
+                bullet.setName("enemybullet");
+                System.out.println("enemy");
+                break;
+
+            case ("player"):
+                bullet.setRotation(shooter.getRotation());
+                bullet.setName("playerbullet");
+                System.out.println("player");
+                break;
+        }
 
         return bullet;
     }
@@ -41,5 +54,4 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     private void setShape(Entity entity) {
         entity.setPolygonCoordinates(2,0,0,2,-2,0,0,-2);
     }
-
 }

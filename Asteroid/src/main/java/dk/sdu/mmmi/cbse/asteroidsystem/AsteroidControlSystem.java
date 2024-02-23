@@ -32,6 +32,7 @@ public class AsteroidControlSystem implements IEntityProcessingService {
         asteroid.speed = random.nextDouble(0.8,1.2);
         setAsteroidShape(asteroid); // Generate semi random shape for the asteroid
         setSpawnLocation(asteroid,gameData); // Generate coordinates for spawn location of asteroid
+        asteroid.setName("asteroid");
         return asteroid;
     }
 

@@ -11,6 +11,7 @@ public class Entity implements Serializable {
     private double x;
     private double y;
     private double rotation;
+    private String name;
             
 
     public String getID() {
@@ -51,6 +52,12 @@ public class Entity implements Serializable {
     public double getRotation() {
         return rotation;
     }
-        
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
