@@ -5,6 +5,7 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.GameKeys;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.services.EntityCoordsSPI;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
 import java.util.Collection;
@@ -13,7 +14,7 @@ import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
 
 
-public class PlayerControlSystem implements IEntityProcessingService {
+public class PlayerControlSystem implements IEntityProcessingService, EntityCoordsSPI {
 
     @Override
     public void process(GameData gameData, World world) {
@@ -33,7 +34,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
             }
             if (gameData.getKeys().isPressed(GameKeys.SPACE)) {
                 for (BulletSPI bulletSPI : getBulletSPIs()) {
-                    Entity bullet = bulletSPI.createBullet(player,gameData);
+                    Entity bullet = bulletSPI.createBullet(player,gameData,world);
                     world.addEntity(bullet);
                 }
             }
@@ -58,5 +59,13 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     private Collection<? extends BulletSPI> getBulletSPIs() {
         return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    @Override
+    public double[] getCoords(Entity entity) {
+        double[] coords = new double[2];
+        coords[0] = entity.getX();
+        coords[1] = entity.getY();
+        return coords;
     }
 }

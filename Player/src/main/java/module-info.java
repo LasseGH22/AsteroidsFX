@@ -1,4 +1,5 @@
 
+import dk.sdu.mmmi.cbse.common.services.EntityCoordsSPI;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 
@@ -8,5 +9,6 @@ module Player {
     uses dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
     provides IGamePluginService with dk.sdu.mmmi.cbse.playersystem.PlayerPlugin;
     provides IEntityProcessingService with dk.sdu.mmmi.cbse.playersystem.PlayerControlSystem;
+    provides EntityCoordsSPI with dk.sdu.mmmi.cbse.playersystem.PlayerControlSystem;
     
 }

@@ -5,9 +5,15 @@ import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.services.EntityCoordsSPI;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
-public class BulletControlSystem implements IEntityProcessingService, BulletSPI {
+import java.util.Collection;
+import java.util.ServiceLoader;
+
+import static java.util.stream.Collectors.toList;
+
+public class BulletControl implements IEntityProcessingService, BulletSPI {
 
     @Override
     public void process(GameData gameData, World world) {
@@ -27,7 +33,7 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     }
 
     @Override
-    public Entity createBullet(Entity shooter, GameData gameData) {
+    public Entity createBullet(Entity shooter, GameData gameData, World world) {
         Entity bullet = new Bullet();
         setShape(bullet);
         bullet.setX(shooter.getX());
@@ -39,6 +45,11 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
                 bullet.setRotation(shooter.getRotation());
                 bullet.setName("enemybullet");
                 System.out.println("enemy");
+                for (Entity player : world.getEntities()) {
+                    if (player.getName().equals("player")) {
+                        bullet.setRotation(Math.toDegrees(Math.atan2(player.getY()- bullet.getY(), player.getX()-bullet.getX())));
+                    }
+                }
                 break;
 
             case ("player"):
@@ -53,5 +64,9 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
 
     private void setShape(Entity entity) {
         entity.setPolygonCoordinates(2,0,0,2,-2,0,0,-2);
+    }
+
+    private Collection<? extends EntityCoordsSPI> getEntityCoordsSPIs() {
+        return ServiceLoader.load(EntityCoordsSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }
