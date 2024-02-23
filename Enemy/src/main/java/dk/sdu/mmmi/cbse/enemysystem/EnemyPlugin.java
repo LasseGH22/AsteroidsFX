@@ -33,5 +33,4 @@ public class EnemyPlugin implements IGamePluginService {
         // Remove entities
         world.removeEntity(enemy);
     }
-
 }

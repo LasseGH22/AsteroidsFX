@@ -12,22 +12,26 @@ public class AsteroidControlSystem implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
 
-        for (Entity asteroid : world.getEntities(Asteroid.class)) {
-            double changeX = Math.cos(Math.toRadians(asteroid.getRotation()));
-            double changeY = Math.sin(Math.toRadians(asteroid.getRotation()));
-            asteroid.setX(asteroid.getX() + changeX);
-            asteroid.setY(asteroid.getY() + changeY);
+        for (Entity entity : world.getEntities(Asteroid.class)) {
+            Asteroid asteroid = (Asteroid) entity;
+            double changeX = Math.cos(Math.toRadians(entity.getRotation()));
+            double changeY = Math.sin(Math.toRadians(entity.getRotation()));
+            entity.setX(entity.getX() + changeX * asteroid.speed);
+            entity.setY(entity.getY() + changeY * asteroid.speed);
+
+            despawnAsteroid(gameData,world,entity);
         }
 
-        world.addEntity(createAsteroid(gameData));
+        if (world.getEntities(Asteroid.class).size() < 10) {
+            world.addEntity(createAsteroid(gameData));
+        }
     }
 
     private Entity createAsteroid(GameData gameData) {
-        Entity asteroid = new Asteroid();
-
+        Asteroid asteroid = new Asteroid();
+        asteroid.speed = random.nextDouble(0.8,1.2);
         setAsteroidShape(asteroid); // Generate semi random shape for the asteroid
         setSpawnLocation(asteroid,gameData); // Generate coordinates for spawn location of asteroid
-
         return asteroid;
     }
 
@@ -41,13 +45,13 @@ public class AsteroidControlSystem implements IEntityProcessingService {
             // Top
             if (asteroidSpawnX > asteroidSpawnY) {
                 asteroid.setX(asteroidSpawnX);
-                asteroid.setY(-5);
+                asteroid.setY(-30);
                 asteroid.setRotation(random.nextInt(0,180));
             }
 
             // Left
             if (asteroidSpawnY >= asteroidSpawnX) {
-                asteroid.setX(-5);
+                asteroid.setX(-30);
                 asteroid.setY(asteroidSpawnY);
                 asteroid.setRotation(90 - random.nextInt(0,180));
             }
@@ -56,13 +60,13 @@ public class AsteroidControlSystem implements IEntityProcessingService {
             // Bottom
             if (asteroidSpawnX > asteroidSpawnY) {
                 asteroid.setX(asteroidSpawnX);
-                asteroid.setY(gameData.getDisplayHeight() - 5);
+                asteroid.setY(gameData.getDisplayHeight() + 30);
                 asteroid.setRotation(180 + random.nextInt(0,180));
             }
 
             // Right
             if (asteroidSpawnY >= asteroidSpawnX) {
-                asteroid.setX(gameData.getDisplayWidth() - 5);
+                asteroid.setX(gameData.getDisplayWidth() + 30);
                 asteroid.setY(asteroidSpawnY);
                 asteroid.setRotation(270 - random.nextInt(0,180));
             }
@@ -87,5 +91,11 @@ public class AsteroidControlSystem implements IEntityProcessingService {
                 points[2][0], points[2][1],
                 points[3][0], points[3][1],
                 points[4][0], points[4][1]);
+    }
+
+    private void despawnAsteroid(GameData gameData, World world, Entity asteroid) {
+        if (asteroid.getX() > gameData.getDisplayWidth() + 30 || asteroid.getX() + gameData.getDisplayWidth() + 30 < gameData.getDisplayWidth() || asteroid.getY() > gameData.getDisplayHeight() + 30 || asteroid.getY() + gameData.getDisplayHeight() + 30 < gameData.getDisplayHeight()) {
+            world.removeEntity(asteroid);
+        }
     }
 }

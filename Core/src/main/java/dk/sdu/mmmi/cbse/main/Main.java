@@ -114,14 +114,17 @@ public class Main extends Application {
             entityProcessorService.process(gameData, world);
         }
 
-//        for (IPostEntityProcessingService postEntityProcessorService : getPostEntityProcessingServices()) {
-//            postEntityProcessorService.process(gameData, world);
-//        }
+        /*
+        for (IPostEntityProcessingService postEntityProcessorService : getPostEntityProcessingServices()) {
+            postEntityProcessorService.process(gameData, world);
+        }
+        
+         */
     }
 
     private void draw() {
 
-        //Remove bullet from game window when not in world map
+        //Remove entities from gameworld if removed from world map
         for (Entity entity : polygons.keySet()) {
             if (!world.getEntities().contains(entity)) {
                 gameWindow.getChildren().remove(polygons.get(entity));
