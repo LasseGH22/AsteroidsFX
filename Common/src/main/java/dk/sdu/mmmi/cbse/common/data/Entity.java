@@ -13,6 +13,7 @@ public class Entity implements Serializable {
     private double rotation;
     private String name;
     private int[] rgb = new int[3];
+    private int radius;
             
 
     public String getID() {
@@ -70,5 +71,13 @@ public class Entity implements Serializable {
         this.rgb[0] = red;
         this.rgb[1] = green;
         this.rgb[2] = blue;
+    }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
     }
 }

@@ -17,8 +17,8 @@ public class AsteroidControlSystem implements IEntityProcessingService {
             Asteroid asteroid = (Asteroid) entity;
             double changeX = Math.cos(Math.toRadians(entity.getRotation()));
             double changeY = Math.sin(Math.toRadians(entity.getRotation()));
-            entity.setX(entity.getX() + changeX * asteroid.speed);
-            entity.setY(entity.getY() + changeY * asteroid.speed);
+            entity.setX(entity.getX() + changeX * asteroid.getSpeed());
+            entity.setY(entity.getY() + changeY * asteroid.getSpeed());
 
             // Despawns asteroid when out of bounds
             despawnAsteroid(gameData,world,entity);
@@ -35,7 +35,9 @@ public class AsteroidControlSystem implements IEntityProcessingService {
         Asteroid asteroid = new Asteroid();
 
         // Sets "randomized" speed
-        asteroid.speed = random.nextDouble(0.8,1.2);
+        asteroid.setSpeed(random.nextDouble(0.8,1.2));
+
+        asteroid.setRadius(random.nextInt(15,25));
 
         // Sets semi random shape
         setAsteroidShape(asteroid);
@@ -91,17 +93,16 @@ public class AsteroidControlSystem implements IEntityProcessingService {
     }
 
     private void setAsteroidShape(Entity asteroid) {
-        double size = random.nextInt(15,25);
 
         // Calculate points of asteroid
         double[][] points = new double[5][2];
         for (int i = 0; i < 5; i++) {
             double angle = Math.toRadians(72 * i - 90);
-            points[i][0] = size * Math.cos(angle) + random.nextInt(10,25);
-            points[i][1] = size * Math.sin(angle) + random.nextInt(10,25);
+            points[i][0] = asteroid.getRadius() * Math.cos(angle) + random.nextInt(10,25);
+            points[i][1] = asteroid.getRadius() * Math.sin(angle) + random.nextInt(10,25);
         }
 
-        // Set coordinates of asteroid polygon from the randomly semi randomly generated values
+        // Set coordinates of asteroid polygon from the semi randomly generated values
         asteroid.setPolygonCoordinates(
                 points[0][0], points[0][1],
                 points[1][0], points[1][1],
