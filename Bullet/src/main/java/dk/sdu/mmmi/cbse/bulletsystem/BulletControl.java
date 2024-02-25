@@ -5,7 +5,6 @@ import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
-import dk.sdu.mmmi.cbse.common.services.EntityCoordsSPI;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
 import java.util.Collection;
@@ -66,9 +65,5 @@ public class BulletControl implements IEntityProcessingService, BulletSPI {
 
     private void setShape(Entity entity) {
         entity.setPolygonCoordinates(2,0,0,2,-2,0,0,-2);
-    }
-
-    private Collection<? extends EntityCoordsSPI> getEntityCoordsSPIs() {
-        return ServiceLoader.load(EntityCoordsSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }

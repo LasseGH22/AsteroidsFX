@@ -19,13 +19,22 @@ public class PlayerPlugin implements IGamePluginService {
         world.addEntity(player);
     }
 
+    // Creates player ship entity
     private Entity createPlayerShip(GameData gameData) {
 
         Entity playerShip = new Player();
+
+        // Sets shape
         playerShip.setPolygonCoordinates(12, -1, 8, -1, 8, -3, 6, -3, 6, -5, -2, -5, -2, -7, 0, -7, 0, -9, -10, -9, -10, -5, -8, -5, -8, -3, -6, -3, -6, -1, -10, -1, -10, 1, -6, 1, -6, 3, -8, 3, -8, 5, -10, 5, -10, 9, 0, 9, 0, 7, -2, 7, -2, 5, 2, 5, 2, 1, 4, 1, 4, -1, 2, -1, 2, -3, 4, -3, 4, -1, 6, -1, 6, 1, 4, 1, 4, 3, 2, 3, 2, 5, 6, 5, 6, 3, 8, 3, 8, 1, 12, 1);
-        playerShip.setRgb(56, 100, 194);
+
+        // Sets spawn coordinates
         playerShip.setX(gameData.getDisplayHeight()/2);
         playerShip.setY(gameData.getDisplayWidth()/2);
+
+        // Sets color
+        playerShip.setRgb(56, 100, 194);
+
+        // Sets name
         playerShip.setName("player");
         return playerShip;
     }

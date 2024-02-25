@@ -19,17 +19,27 @@ public class EnemyPlugin implements IGamePluginService {
         world.addEntity(enemy);
     }
 
+    // Creates enemy ship entity
     private Entity createEnemyShip(GameData gameData) {
 
         Entity enemyShip = new Enemy();
+
+        // Sets shape
         enemyShip.setPolygonCoordinates(12, -1, 8, -1, 8, -3, 6, -3, 6, -5, -2, -5, -2, -7, 0, -7, 0, -9, -10, -9, -10, -5, -8, -5, -8, -3, -6, -3, -6, -1, -10, -1, -10, 1, -6, 1, -6, 3, -8, 3, -8, 5, -10, 5, -10, 9, 0, 9, 0, 7, -2, 7, -2, 5, 2, 5, 2, 1, 4, 1, 4, -1, 2, -1, 2, -3, 4, -3, 4, -1, 6, -1, 6, 1, 4, 1, 4, 3, 2, 3, 2, 5, 6, 5, 6, 3, 8, 3, 8, 1, 12, 1);
+
+        // Sets spawn coordinates
         enemyShip.setX(gameData.getDisplayHeight()/2);
         enemyShip.setY(gameData.getDisplayWidth()/2);
+
+        // Sets color
         enemyShip.setRgb(158, 39, 30);
+
+        // Sets name
         enemyShip.setName("enemy");
         return enemyShip;
     }
 
+    // Removes all enemy ship entities when application is stopped
     @Override
     public void stop(GameData gameData, World world) {
         // Remove entities

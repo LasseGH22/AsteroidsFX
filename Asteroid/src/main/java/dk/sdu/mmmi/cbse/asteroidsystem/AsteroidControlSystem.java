@@ -12,6 +12,7 @@ public class AsteroidControlSystem implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
 
+        // Handles movement for all Asteroids
         for (Entity entity : world.getEntities(Asteroid.class)) {
             Asteroid asteroid = (Asteroid) entity;
             double changeX = Math.cos(Math.toRadians(entity.getRotation()));
@@ -19,21 +20,35 @@ public class AsteroidControlSystem implements IEntityProcessingService {
             entity.setX(entity.getX() + changeX * asteroid.speed);
             entity.setY(entity.getY() + changeY * asteroid.speed);
 
+            // Despawns asteroid when out of bounds
             despawnAsteroid(gameData,world,entity);
         }
 
-        if (world.getEntities(Asteroid.class).size() < 10) {
+        // Spawns a max of 5 Asteroids
+        if (world.getEntities(Asteroid.class).size() <= 5) {
             world.addEntity(createAsteroid(gameData));
         }
     }
 
+    // Creates Asteroid
     private Entity createAsteroid(GameData gameData) {
         Asteroid asteroid = new Asteroid();
+
+        // Sets "randomized" speed
         asteroid.speed = random.nextDouble(0.8,1.2);
-        setAsteroidShape(asteroid); // Generate semi random shape for the asteroid
-        setSpawnLocation(asteroid,gameData); // Generate coordinates for spawn location of asteroid
+
+        // Sets semi random shape
+        setAsteroidShape(asteroid);
+
+        // Sets spawn location
+        setSpawnLocation(asteroid,gameData);
+
+        // Sets name
         asteroid.setName("asteroid");
+
+        // Sets color
         asteroid.setRgb(255, 255, 255);
+
         return asteroid;
     }
 
