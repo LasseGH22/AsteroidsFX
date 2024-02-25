@@ -45,7 +45,9 @@ public class Main extends Application {
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         gameWindow.getChildren().add(text);
 
+
         Scene scene = new Scene(gameWindow);
+        scene.setFill(javafx.scene.paint.Color.rgb(0,0,0)); // Set background color to black
         scene.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.LEFT)) {
                 gameData.getKeys().setKey(GameKeys.LEFT, true);
@@ -142,6 +144,7 @@ public class Main extends Application {
                 polygons.put(entity,polygon);
                 gameWindow.getChildren().add(polygon);
             }
+            polygon.setFill(javafx.scene.paint.Color.rgb(entity.getRgb()[0],entity.getRgb()[1],entity.getRgb()[2]));
             polygon.setTranslateX(entity.getX());
             polygon.setTranslateY(entity.getY());
             polygon.setRotate(entity.getRotation());

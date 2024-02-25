@@ -38,6 +38,8 @@ public class BulletControl implements IEntityProcessingService, BulletSPI {
         setShape(bullet);
         bullet.setX(shooter.getX());
         bullet.setY(shooter.getY());
+        int[] color = shooter.getRgb();
+        bullet.setRgb(color[0],color[1],color[2]);
 
         switch (shooter.getName()) {
 

@@ -12,6 +12,7 @@ public class Entity implements Serializable {
     private double y;
     private double rotation;
     private String name;
+    private int[] rgb = new int[3];
             
 
     public String getID() {
@@ -59,5 +60,15 @@ public class Entity implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int[] getRgb() {
+        return rgb;
+    }
+
+    public void setRgb(int red, int green, int blue) {
+        this.rgb[0] = red;
+        this.rgb[1] = green;
+        this.rgb[2] = blue;
     }
 }
