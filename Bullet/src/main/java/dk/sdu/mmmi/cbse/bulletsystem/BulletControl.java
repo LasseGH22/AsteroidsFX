@@ -3,6 +3,7 @@ package dk.sdu.mmmi.cbse.bulletsystem;
 import dk.sdu.mmmi.cbse.common.bullet.Bullet;
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
+import dk.sdu.mmmi.cbse.common.data.EntityTag;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
@@ -40,21 +41,22 @@ public class BulletControl implements IEntityProcessingService, BulletSPI {
         int[] color = shooter.getRgb();
         bullet.setRgb(color[0],color[1],color[2]);
 
-        switch (shooter.getName()) {
+        EntityTag shooterTag = shooter.getTag();
+        switch (shooterTag) {
 
-            case ("enemy"):
+            case ENEMY:
                 bullet.setRotation(shooter.getRotation());
-                bullet.setName("enemybullet");
+                bullet.setTag(EntityTag.ENEMY_BULLET);
                 for (Entity player : world.getEntities()) {
-                    if (player.getName().equals("player")) {
+                    if (player.getTag() == EntityTag.PLAYER) {
                         bullet.setRotation(Math.toDegrees(Math.atan2(player.getY()- bullet.getY(), player.getX()-bullet.getX())));
                     }
                 }
                 break;
 
-            case ("player"):
+            case PLAYER:
                 bullet.setRotation(shooter.getRotation());
-                bullet.setName("playerbullet");
+                bullet.setTag(EntityTag.PLAYER_BULLET);
                 break;
         }
 

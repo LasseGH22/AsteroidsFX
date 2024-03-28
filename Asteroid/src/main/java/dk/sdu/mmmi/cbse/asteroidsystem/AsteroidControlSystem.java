@@ -3,6 +3,7 @@ package dk.sdu.mmmi.cbse.asteroidsystem;
 import dk.sdu.mmmi.cbse.CommonAsteroid.Asteroid;
 import dk.sdu.mmmi.cbse.CommonAsteroid.AsteroidSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
+import dk.sdu.mmmi.cbse.common.data.EntityTag;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
@@ -47,8 +48,8 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
         // Sets spawn location
         setSpawnLocation(asteroid,gameData);
 
-        // Sets name
-        asteroid.setName("asteroid");
+        // Sets Tag
+        asteroid.setTag(EntityTag.ASTEROID);
 
         // Sets color
         asteroid.setRgb(255, 255, 255);
@@ -122,7 +123,7 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
                 points[4][0], points[4][1]);
 
         double scalingFactor = 0.5;
-        asteroid.setBoundingCircleRadious(maxDistance * scalingFactor);
+        asteroid.setBoundingCircleRadius(maxDistance * scalingFactor);
     }
 
     private void despawnAsteroid(GameData gameData, World world, Entity asteroid) {

@@ -1,6 +1,7 @@
 package dk.sdu.mmmi.cbse.playersystem;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
+import dk.sdu.mmmi.cbse.common.data.EntityTag;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
@@ -34,8 +35,8 @@ public class PlayerPlugin implements IGamePluginService {
         // Sets color
         playerShip.setRgb(56, 100, 194);
 
-        // Sets name
-        playerShip.setName("player");
+        // Sets Tag
+        playerShip.setTag(EntityTag.PLAYER);
         return playerShip;
     }
 

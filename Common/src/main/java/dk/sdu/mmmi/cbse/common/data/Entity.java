@@ -13,9 +13,10 @@ public class Entity implements Serializable {
     private String name;
     private int[] rgb = new int[3];
     private int radius;
-    private double boundingCircleRadious;
+    private double boundingCircleRadius;
     private long lastCollisionTime = 0;
     private long collisionCooldown = 500;
+    private EntityTag tag;
             
 
     public String getID() {
@@ -83,12 +84,20 @@ public class Entity implements Serializable {
         this.radius = radius;
     }
 
-    public double getBoundingCircleRadious() {
-        return boundingCircleRadious;
+    public double getBoundingCircleRadius() {
+        return boundingCircleRadius;
     }
 
-    public void setBoundingCircleRadious(double boundingCircleRadious) {
-        this.boundingCircleRadious = boundingCircleRadious;
+    public void setBoundingCircleRadius(double boundingCircleRadius) {
+        this.boundingCircleRadius = boundingCircleRadius;
+    }
+
+    public EntityTag getTag() {
+        return tag;
+    }
+
+    public void setTag(EntityTag tag) {
+        this.tag = tag;
     }
 
     public boolean canCollide() {

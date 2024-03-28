@@ -1,6 +1,7 @@
 package dk.sdu.mmmi.cbse.collisionsystem;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
+import dk.sdu.mmmi.cbse.common.data.EntityTag;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
@@ -17,42 +18,50 @@ public class CollisionDetection implements IPostEntityProcessingService {
 
                 if (collidesWith(entity,collisionEntity)) {
                     if (entity.canCollide() && collisionEntity.canCollide()) {
+                        boolean successfulCollision = false;
 
-                        // Asteroid & Asteroid Collision
-                        if (entity.getName().equals("Asteroid") && collisionEntity.getName().equals("Asteroid")) {
-                            System.out.println("Asteroid & Asteroid Collision Detected");
+                        String collisionBuddies = entity.getTag().toString() + "/" + collisionEntity.getTag().toString();
+
+                        switch (collisionBuddies) {
+                            case ("ASTEROID/ASTEROID"):
+
+                                break;
+
+                            case ("PLAYER/ASTEROID"):
+
+                                break;
+
+                            case ("PLAYER_BULLET/ASTEROID"):
+                                collisionEntity.setRotation(collisionEntity.getRotation() - 180);
+                                successfulCollision = true;
+                                break;
+
+                            case ("PLAYER/ENEMY_BULLET"):
+
+                                break;
+
+                            case ("ENEMY/ASTEROID"):
+
+                                break;
+
+                            case ("ENEMY_BULLET/ASTEROID"):
+
+                                break;
+
+                            case ("ENEMY/PLAYER_BULLET"):
+
+                                break;
+
+                            case ("PLAYER/ENEMY"):
+
+                                break;
+
                         }
 
-                        // Bullet & Asteroid Collision
-                        if (entity.getClass().toString().contains("Bullet") && collisionEntity.getClass().toString().contains("Asteroid")) {
-                            System.out.println("Asteroid & Bullet Collision Detected");
+                        if (successfulCollision) {
                             entity.markCollision();
                             collisionEntity.markCollision();
-                            collisionEntity.setRotation(collisionEntity.getRotation() - 180);
                         }
-
-                    /*
-                    // Player & Asteroid Collision
-                    if (entity.getClass().toString().contains("Player") && collisionEntity.getClass().toString().contains("Asteroid")) {
-                        System.out.println("Player & Asteroid Collision Detected");
-                    }
-
-                    // Player & Enemy Collision
-                    if (entity.getClass().toString().contains("Player") && collisionEntity.getClass().toString().contains("Enemy")) {
-                        System.out.println("Player & Enemy Collision Detected");
-                    }
-
-                    // Player & Bullet Collision
-                    if (entity.getClass().toString().contains("Player") && collisionEntity.getClass().toString().contains("Bullet")) {
-                        System.out.println("Player & Bullet Collision Detected");
-                    }
-
-                    //Enemy & Bullet Collision
-                    if (entity.getClass().toString().contains("Enemy") && collisionEntity.getClass().toString().contains("Bullet")) {
-                        System.out.println("Enemy & Bullet Collision Detected");
-                    }
-
-                     */
                     }
                 }
             }
@@ -61,6 +70,6 @@ public class CollisionDetection implements IPostEntityProcessingService {
 
     private boolean collidesWith(Entity entity1, Entity entity2) {
         double distance = Math.sqrt(Math.pow(entity1.getX() - entity2.getX(),2) + Math.pow(entity1.getY() - entity2.getY(),2));
-        return distance <= entity1.getBoundingCircleRadious() + entity2.getBoundingCircleRadious();
+        return distance <= entity1.getBoundingCircleRadius() + entity2.getBoundingCircleRadius();
     }
 }
