@@ -98,10 +98,19 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
 
         // Calculate points of asteroid
         double[][] points = new double[5][2];
+        double maxDistance = 0;
+        double baseRadius = asteroid.getRadius() * 1.5;
         for (int i = 0; i < 5; i++) {
             double angle = Math.toRadians(72 * i - 90);
-            points[i][0] = asteroid.getRadius() * Math.cos(angle) + random.nextInt(10,25);
-            points[i][1] = asteroid.getRadius() * Math.sin(angle) + random.nextInt(10,25);
+            double offset = random.nextInt(5,10);
+            points[i][0] = baseRadius * Math.cos(angle) + offset;
+            points[i][1] = baseRadius * Math.sin(angle) + offset;
+
+            // Calculate the furthest point from the center
+            double distance = Math.sqrt(Math.pow(points[i][0], 2) + Math.pow(points[i][1], 2));
+            if (distance > maxDistance) {
+                maxDistance = distance;
+            }
         }
 
         // Set coordinates of asteroid polygon from the semi randomly generated values
@@ -111,6 +120,9 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
                 points[2][0], points[2][1],
                 points[3][0], points[3][1],
                 points[4][0], points[4][1]);
+
+        double scalingFactor = 0.5;
+        asteroid.setBoundingCircleRadious(maxDistance * scalingFactor);
     }
 
     private void despawnAsteroid(GameData gameData, World world, Entity asteroid) {

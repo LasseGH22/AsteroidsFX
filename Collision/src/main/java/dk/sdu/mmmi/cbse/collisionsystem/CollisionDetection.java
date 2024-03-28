@@ -10,19 +10,28 @@ public class CollisionDetection implements IPostEntityProcessingService {
     public void process(GameData gameData, World world) {
         for (Entity entity : world.getEntities()) {
             for (Entity collisionEntity : world.getEntities()) {
-                if (!entity.equals(collisionEntity) && colidesWith(entity,collisionEntity)) {
 
-                    // Asteroid & Asteroid Collision
-                    if (entity.getName().equals("Asteroid") && collisionEntity.getName().equals("Asteroid")) {
-                        System.out.println("Asteroid & Asteroid Collision Detected");
-                    }
+                if  (entity.equals(collisionEntity)) {
+                    continue;
+                }
+
+                if (collidesWith(entity,collisionEntity)) {
+                    if (entity.canCollide() && collisionEntity.canCollide()) {
+
+                        // Asteroid & Asteroid Collision
+                        if (entity.getName().equals("Asteroid") && collisionEntity.getName().equals("Asteroid")) {
+                            System.out.println("Asteroid & Asteroid Collision Detected");
+                        }
+
+                        // Bullet & Asteroid Collision
+                        if (entity.getClass().toString().contains("Bullet") && collisionEntity.getClass().toString().contains("Asteroid")) {
+                            System.out.println("Asteroid & Bullet Collision Detected");
+                            entity.markCollision();
+                            collisionEntity.markCollision();
+                            collisionEntity.setRotation(collisionEntity.getRotation() - 180);
+                        }
 
                     /*
-                    // Bullet & Asteroid Collision
-                    if (entity.getClass().toString().contains("Bullet") && collisionEntity.getClass().toString().contains("Asteroid")) {
-                        System.out.println("Asteroid & Bullet Collision Detected");
-                    }
-
                     // Player & Asteroid Collision
                     if (entity.getClass().toString().contains("Player") && collisionEntity.getClass().toString().contains("Asteroid")) {
                         System.out.println("Player & Asteroid Collision Detected");
@@ -44,13 +53,14 @@ public class CollisionDetection implements IPostEntityProcessingService {
                     }
 
                      */
+                    }
                 }
             }
         }
     }
 
-    private boolean colidesWith(Entity entity1, Entity entity2) {
+    private boolean collidesWith(Entity entity1, Entity entity2) {
         double distance = Math.sqrt(Math.pow(entity1.getX() - entity2.getX(),2) + Math.pow(entity1.getY() - entity2.getY(),2));
-        return distance <= entity1.getRadius() + entity2.getRadius();
+        return distance <= entity1.getBoundingCircleRadious() + entity2.getBoundingCircleRadious();
     }
 }

@@ -6,7 +6,6 @@ import java.util.UUID;
 public class Entity implements Serializable {
 
     private final UUID ID = UUID.randomUUID();
-    
     private double[] polygonCoordinates;
     private double x;
     private double y;
@@ -14,6 +13,9 @@ public class Entity implements Serializable {
     private String name;
     private int[] rgb = new int[3];
     private int radius;
+    private double boundingCircleRadious;
+    private long lastCollisionTime = 0;
+    private long collisionCooldown = 500;
             
 
     public String getID() {
@@ -79,5 +81,22 @@ public class Entity implements Serializable {
 
     public void setRadius(int radius) {
         this.radius = radius;
+    }
+
+    public double getBoundingCircleRadious() {
+        return boundingCircleRadious;
+    }
+
+    public void setBoundingCircleRadious(double boundingCircleRadious) {
+        this.boundingCircleRadious = boundingCircleRadious;
+    }
+
+    public boolean canCollide() {
+        long currentTime = System.currentTimeMillis();
+        return (currentTime - lastCollisionTime > collisionCooldown);
+    }
+
+    public void markCollision() {
+        lastCollisionTime = System.currentTimeMillis();
     }
 }
