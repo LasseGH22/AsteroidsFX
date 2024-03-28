@@ -45,7 +45,6 @@ public class BulletControl implements IEntityProcessingService, BulletSPI {
             case ("enemy"):
                 bullet.setRotation(shooter.getRotation());
                 bullet.setName("enemybullet");
-                System.out.println("enemy");
                 for (Entity player : world.getEntities()) {
                     if (player.getName().equals("player")) {
                         bullet.setRotation(Math.toDegrees(Math.atan2(player.getY()- bullet.getY(), player.getX()-bullet.getX())));
@@ -56,7 +55,6 @@ public class BulletControl implements IEntityProcessingService, BulletSPI {
             case ("player"):
                 bullet.setRotation(shooter.getRotation());
                 bullet.setName("playerbullet");
-                System.out.println("player");
                 break;
         }
 

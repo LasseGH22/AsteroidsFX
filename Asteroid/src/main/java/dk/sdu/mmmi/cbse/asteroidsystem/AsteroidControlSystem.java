@@ -1,5 +1,7 @@
 package dk.sdu.mmmi.cbse.asteroidsystem;
 
+import dk.sdu.mmmi.cbse.CommonAsteroid.Asteroid;
+import dk.sdu.mmmi.cbse.CommonAsteroid.AsteroidSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
@@ -7,7 +9,7 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
 import java.util.Random;
 
-public class AsteroidControlSystem implements IEntityProcessingService {
+public class AsteroidControlSystem implements IEntityProcessingService, AsteroidSPI {
     Random random = new Random();
     @Override
     public void process(GameData gameData, World world) {
@@ -25,13 +27,13 @@ public class AsteroidControlSystem implements IEntityProcessingService {
         }
 
         // Spawns a max of 5 Asteroids
-        if (world.getEntities(Asteroid.class).size() <= 5) {
+        if (world.getEntities(Asteroid.class).size() <= 15) {
             world.addEntity(createAsteroid(gameData));
         }
     }
 
     // Creates Asteroid
-    private Entity createAsteroid(GameData gameData) {
+    public Entity createAsteroid(GameData gameData) {
         Asteroid asteroid = new Asteroid();
 
         // Sets "randomized" speed

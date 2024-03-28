@@ -12,30 +12,38 @@ public class CollisionDetection implements IPostEntityProcessingService {
             for (Entity collisionEntity : world.getEntities()) {
                 if (!entity.equals(collisionEntity) && colidesWith(entity,collisionEntity)) {
 
+                    // Asteroid & Asteroid Collision
+                    if (entity.getName().equals("Asteroid") && collisionEntity.getName().equals("Asteroid")) {
+                        System.out.println("Asteroid & Asteroid Collision Detected");
+                    }
+
+                    /*
                     // Bullet & Asteroid Collision
                     if (entity.getClass().toString().contains("Bullet") && collisionEntity.getClass().toString().contains("Asteroid")) {
-                        System.out.println("Asteroid & Bullet Collision Detected: " + entity.getClass() + "|" + collisionEntity.getClass());
+                        System.out.println("Asteroid & Bullet Collision Detected");
                     }
 
                     // Player & Asteroid Collision
                     if (entity.getClass().toString().contains("Player") && collisionEntity.getClass().toString().contains("Asteroid")) {
-                        System.out.println("Player & Asteroid Collision Detected: " + entity.getClass() + "|" + collisionEntity.getClass());
+                        System.out.println("Player & Asteroid Collision Detected");
                     }
 
                     // Player & Enemy Collision
                     if (entity.getClass().toString().contains("Player") && collisionEntity.getClass().toString().contains("Enemy")) {
-                        System.out.println("Player & Enemy Collision Detected: " + entity.getClass() + "|" + collisionEntity.getClass());
+                        System.out.println("Player & Enemy Collision Detected");
                     }
 
                     // Player & Bullet Collision
                     if (entity.getClass().toString().contains("Player") && collisionEntity.getClass().toString().contains("Bullet")) {
-                        System.out.println("Player & Bullet Collision Detected: " + entity.getClass() + "|" + collisionEntity.getClass());
+                        System.out.println("Player & Bullet Collision Detected");
                     }
 
                     //Enemy & Bullet Collision
                     if (entity.getClass().toString().contains("Enemy") && collisionEntity.getClass().toString().contains("Bullet")) {
-                        System.out.println("Enemy & Bullet Collision Detected: " + entity.getClass() + "|" + collisionEntity.getClass());
+                        System.out.println("Enemy & Bullet Collision Detected");
                     }
+
+                     */
                 }
             }
         }
