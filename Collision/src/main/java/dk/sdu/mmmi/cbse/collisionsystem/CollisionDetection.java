@@ -32,6 +32,7 @@ public class CollisionDetection implements IPostEntityProcessingService {
                                 break;
 
                             case ("PLAYER_BULLET/ASTEROID"):
+                                world.removeEntity(entity);
                                 collisionEntity.setRotation(collisionEntity.getRotation() - 180);
                                 successfulCollision = true;
                                 break;
