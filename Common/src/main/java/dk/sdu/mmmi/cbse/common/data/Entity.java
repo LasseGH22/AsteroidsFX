@@ -10,7 +10,6 @@ public class Entity implements Serializable {
     private double x;
     private double y;
     private double rotation;
-    private String name;
     private int[] rgb = new int[3];
     private int radius;
     private double boundingCircleRadius;
@@ -56,14 +55,6 @@ public class Entity implements Serializable {
 
     public double getRotation() {
         return rotation;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int[] getRgb() {
