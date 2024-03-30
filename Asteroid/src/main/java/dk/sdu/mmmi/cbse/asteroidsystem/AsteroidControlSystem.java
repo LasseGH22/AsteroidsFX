@@ -28,7 +28,7 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
         }
 
         // Spawns a max of 5 Asteroids
-        if (world.getEntities(Asteroid.class).size() <= 15) {
+        if (world.getEntities(Asteroid.class).size() <= 5) {
             world.addEntity(createAsteroid(gameData));
         }
     }
@@ -164,12 +164,55 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
             splitAsteroids[i] = asteroid;
         }
 
-        /*
-        splitAsteroids[0].setRotation(parentAsteroid.getRotation());
-        splitAsteroids[1].setRotation(parentAsteroid.getRotation() - 180);
-
-         */
-
         return splitAsteroids;
     }
+
+    @Override
+    public void asteroidBounce(Asteroid asteroid1, Asteroid asteroid2) {
+
+        // Convert rotation and speed to velocity components
+        double asteroid1Vx = Math.cos(Math.toRadians(asteroid1.getRotation())) * asteroid1.getSpeed();
+        double asteroid1Vy = Math.sin(Math.toRadians(asteroid1.getRotation())) * asteroid1.getSpeed();
+        double asteroid2Vx = Math.cos(Math.toRadians(asteroid2.getRotation())) * asteroid2.getSpeed();
+        double asteroid2Vy = Math.sin(Math.toRadians(asteroid2.getRotation())) * asteroid2.getSpeed();
+
+        // Calculate the difference vector between asteroids' centers
+        double dx = asteroid2.getX() - asteroid1.getX();
+        double dy = asteroid2.getY() - asteroid1.getY();
+
+        // Normalize difference vector for direction
+        double distance = Math.sqrt(dx * dx + dy * dy);
+        double nx = dx / distance; // Normal x direction
+        double ny = dy / distance; // Normal y direction
+
+        // Calculate relative velocity vector
+        double rvx = asteroid2Vx - asteroid1Vx;
+        double rvy = asteroid2Vy - asteroid1Vy;
+
+        // Calculate relative velocity in normal direction (dot product)
+        double velAlongNormal = rvx * nx + rvy * ny;
+
+        // Do not proceed if velocities are separating
+        if (velAlongNormal > 0) return;
+
+        // Calculate reflection velocities
+        double newAsteroid1Vx = asteroid1Vx + velAlongNormal * nx;
+        double newAsteroid1Vy = asteroid1Vy + velAlongNormal * ny;
+        double newAsteroid2Vx = asteroid2Vx - velAlongNormal * nx;
+        double newAsteroid2Vy = asteroid2Vy - velAlongNormal * ny;
+
+        // Convert velocity back to speed and rotation
+        updateAsteroidVelocity(asteroid1, newAsteroid1Vx, newAsteroid1Vy);
+        updateAsteroidVelocity(asteroid2, newAsteroid2Vx, newAsteroid2Vy);
+    }
+
+    private static void updateAsteroidVelocity(Asteroid asteroid, double vx, double vy) {
+        double newSpeed = Math.sqrt(vx * vx + vy * vy);
+        double newRotation = Math.toDegrees(Math.atan2(vy, vx));
+        newRotation = (newRotation < 0) ? newRotation + 360 : newRotation; // Normalize rotation
+
+        asteroid.setSpeed(newSpeed);
+        asteroid.setRotation(newRotation);
+    }
+
 }

@@ -1,5 +1,6 @@
 package dk.sdu.mmmi.cbse.collisionsystem;
 
+import dk.sdu.mmmi.cbse.CommonAsteroid.Asteroid;
 import dk.sdu.mmmi.cbse.CommonAsteroid.AsteroidSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
@@ -30,6 +31,10 @@ public class CollisionDetection implements IPostEntityProcessingService {
                         switch (collisionBuddies) {
                             case ("ASTEROID/ASTEROID"):
                                 // Logic for Asteroid & Asteroid Collision
+                                getAsteroidSPIs().stream().findFirst().ifPresent(
+                                        spi -> {spi.asteroidBounce((Asteroid) entity, (Asteroid) collisionEntity);}
+                                );
+                                successfulCollision = true;
                                 break;
 
                             case ("PLAYER/ASTEROID"):
