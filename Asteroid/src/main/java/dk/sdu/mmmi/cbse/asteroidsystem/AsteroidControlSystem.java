@@ -122,7 +122,7 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
                 points[3][0], points[3][1],
                 points[4][0], points[4][1]);
 
-        double scalingFactor = 0.5;
+        double scalingFactor = 0.7;
         asteroid.setBoundingCircleRadius(maxDistance * scalingFactor);
     }
 
@@ -130,5 +130,46 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
         if (asteroid.getX() > gameData.getDisplayWidth() + 30 || asteroid.getX() + gameData.getDisplayWidth() + 30 < gameData.getDisplayWidth() || asteroid.getY() > gameData.getDisplayHeight() + 30 || asteroid.getY() + gameData.getDisplayHeight() + 30 < gameData.getDisplayHeight()) {
             world.removeEntity(asteroid);
         }
+    }
+
+    @Override
+    public void asteroidSplit(Entity entity, World world) {
+        Entity[] newAsteroids = createSplitAsteroids(entity);
+
+        for (Entity asteroid : newAsteroids) {
+            world.addEntity(asteroid);
+        }
+    }
+
+    public Entity[] createSplitAsteroids(Entity entity) {
+        Asteroid parentAsteroid = (Asteroid) entity;
+        Entity[] splitAsteroids = new Entity[random.nextInt(2,4)];
+
+        for (int i = 0; i < splitAsteroids.length; i++) {
+            Asteroid asteroid = new Asteroid();
+            asteroid.setRadius(parentAsteroid.getRadius() / 2);
+
+            setAsteroidShape(asteroid);
+
+            asteroid.setSpeed(parentAsteroid.getSpeed());
+
+            asteroid.setX(parentAsteroid.getX());
+            asteroid.setY(parentAsteroid.getY());
+            asteroid.setRotation(random.nextInt(0,360));
+
+            asteroid.setTag(EntityTag.SPLIT_ASTEROID);
+
+            asteroid.setRgb(255,255,255);
+
+            splitAsteroids[i] = asteroid;
+        }
+
+        /*
+        splitAsteroids[0].setRotation(parentAsteroid.getRotation());
+        splitAsteroids[1].setRotation(parentAsteroid.getRotation() - 180);
+
+         */
+
+        return splitAsteroids;
     }
 }
