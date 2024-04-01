@@ -1,7 +1,5 @@
 package dk.sdu.mmmi.cbse.asteroidsystem;
 
-import dk.sdu.mmmi.cbse.CommonAsteroid.Asteroid;
-import dk.sdu.mmmi.cbse.CommonAsteroid.AsteroidSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.EntityTag;
 import dk.sdu.mmmi.cbse.common.data.GameData;
@@ -27,8 +25,9 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
             despawnAsteroid(gameData,world,entity);
         }
 
-        // Spawns a max of 5 Asteroids
-        if (world.getEntities(Asteroid.class).size() <= 5) {
+        if (world.getEntities(Asteroid.class).stream()
+                .filter(a -> a.getTag().equals(EntityTag.ASTEROID))
+                .count() <= 5) {
             world.addEntity(createAsteroid(gameData));
         }
     }
@@ -143,7 +142,9 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
 
     public Entity[] createSplitAsteroids(Entity entity) {
         Asteroid parentAsteroid = (Asteroid) entity;
-        Entity[] splitAsteroids = new Entity[random.nextInt(2,4)];
+        Entity[] splitAsteroids = new Entity[random.nextInt(2,5)];
+
+        System.out.println(splitAsteroids.length);
 
         for (int i = 0; i < splitAsteroids.length; i++) {
             Asteroid asteroid = new Asteroid();
@@ -155,9 +156,15 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
 
             asteroid.setX(parentAsteroid.getX());
             asteroid.setY(parentAsteroid.getY());
-            asteroid.setRotation(random.nextInt(0,360));
+            if (i == 0) {
+                asteroid.setRotation(random.nextInt(0,90));
+            } else {
+                asteroid.setRotation(splitAsteroids[i-1].getRotation() + random.nextInt(45,90));
+            }
 
             asteroid.setTag(EntityTag.SPLIT_ASTEROID);
+
+            asteroid.markCollision();
 
             asteroid.setRgb(255,255,255);
 

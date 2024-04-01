@@ -1,7 +1,7 @@
 package dk.sdu.mmmi.cbse.collisionsystem;
 
-import dk.sdu.mmmi.cbse.CommonAsteroid.Asteroid;
-import dk.sdu.mmmi.cbse.CommonAsteroid.AsteroidSPI;
+import dk.sdu.mmmi.cbse.asteroidsystem.Asteroid;
+import dk.sdu.mmmi.cbse.asteroidsystem.AsteroidSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
@@ -29,7 +29,7 @@ public class CollisionDetection implements IPostEntityProcessingService {
                         String collisionBuddies = entity.getTag().toString() + "/" + collisionEntity.getTag().toString();
 
                         switch (collisionBuddies) {
-                            case ("ASTEROID/ASTEROID"):
+                            case ("ASTEROID/ASTEROID"), ("ASTEROID/SPLIT_ASTEROID"), ("SPLIT_ASTEROID/SPLIT_ASTEROID"):
                                 // Logic for Asteroid & Asteroid Collision
                                 getAsteroidSPIs().stream().findFirst().ifPresent(
                                         spi -> {spi.asteroidBounce((Asteroid) entity, (Asteroid) collisionEntity);}

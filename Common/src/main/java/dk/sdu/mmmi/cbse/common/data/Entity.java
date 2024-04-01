@@ -14,7 +14,7 @@ public class Entity implements Serializable {
     private int radius;
     private double boundingCircleRadius;
     private long lastCollisionTime = 0;
-    private long collisionCooldown = 500;
+    private long collisionCooldown = 100;
     private EntityTag tag;
             
 
