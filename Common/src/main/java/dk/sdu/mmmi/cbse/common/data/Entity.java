@@ -14,7 +14,7 @@ public class Entity implements Serializable {
     private int radius;
     private double boundingCircleRadius;
     private long lastCollisionTime = 0;
-    private long collisionCooldown = 100;
+    private long immunityFrames = 100;
     private EntityTag tag;
             
 
@@ -93,10 +93,14 @@ public class Entity implements Serializable {
 
     public boolean canCollide() {
         long currentTime = System.currentTimeMillis();
-        return (currentTime - lastCollisionTime > collisionCooldown);
+        return (currentTime - lastCollisionTime > immunityFrames);
     }
 
     public void markCollision() {
         lastCollisionTime = System.currentTimeMillis();
+    }
+
+    public void setImmunityFrames(long immunityFrames) {
+        this.immunityFrames = immunityFrames;
     }
 }

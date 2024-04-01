@@ -3,9 +3,13 @@ package dk.sdu.mmmi.cbse.collisionsystem;
 import dk.sdu.mmmi.cbse.asteroidsystem.Asteroid;
 import dk.sdu.mmmi.cbse.asteroidsystem.AsteroidSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
+import dk.sdu.mmmi.cbse.common.data.EntityTag;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+import dk.sdu.mmmi.cbse.playersystem.Player;
+import dk.sdu.mmmi.cbse.playersystem.PlayerSPI;
+
 
 import java.util.Collection;
 import java.util.ServiceLoader;
@@ -30,31 +34,35 @@ public class CollisionDetection implements IPostEntityProcessingService {
 
                         switch (collisionBuddies) {
                             case ("ASTEROID/ASTEROID"), ("ASTEROID/SPLIT_ASTEROID"), ("SPLIT_ASTEROID/SPLIT_ASTEROID"):
-                                // Logic for Asteroid & Asteroid Collision
                                 getAsteroidSPIs().stream().findFirst().ifPresent(
-                                        spi -> {spi.asteroidBounce((Asteroid) entity, (Asteroid) collisionEntity);}
+                                        spi -> spi.asteroidBounce((Asteroid) entity, (Asteroid) collisionEntity)
                                 );
+
                                 successfulCollision = true;
                                 break;
 
                             case ("PLAYER/ASTEROID"):
-                                // Logic for Player & Asteroid Collision
-                                break;
-
-                            case ("PLAYER_BULLET/ASTEROID"):
-                                world.removeEntity(entity);
-                                world.removeEntity(collisionEntity);
-
-                                getAsteroidSPIs().stream().findFirst().ifPresent(
-                                        spi -> {spi.asteroidSplit(collisionEntity,world);}
+                                getPlayerSPIs().stream().findFirst().ifPresent(
+                                        spi -> {
+                                            spi.removeLife(entity);
+                                            spi.resetPlayer(entity,gameData);
+                                        }
                                 );
 
                                 successfulCollision = true;
                                 break;
 
-                            case ("PLAYER_BULLET/SPLIT_ASTEROID"):
+                            case ("PLAYER_BULLET/ASTEROID"), ("PLAYER_BULLET/SPLIT_ASTEROID"):
                                 world.removeEntity(entity);
                                 world.removeEntity(collisionEntity);
+
+                                if (collisionEntity.getTag().equals(EntityTag.ASTEROID)) {
+                                    getAsteroidSPIs().stream().findFirst().ifPresent(
+                                            spi -> spi.asteroidSplit(collisionEntity,world)
+                                    );
+                                }
+
+                                successfulCollision = true;
                                 break;
 
                             case ("PLAYER/ENEMY_BULLET"):
@@ -97,5 +105,9 @@ public class CollisionDetection implements IPostEntityProcessingService {
 
     private Collection<? extends AsteroidSPI> getAsteroidSPIs() {
         return ServiceLoader.load(AsteroidSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    private Collection<? extends PlayerSPI> getPlayerSPIs() {
+        return ServiceLoader.load(PlayerSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }

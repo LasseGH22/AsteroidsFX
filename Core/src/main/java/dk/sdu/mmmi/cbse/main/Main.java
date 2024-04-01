@@ -14,9 +14,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import static java.util.stream.Collectors.toList;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -27,6 +29,8 @@ public class Main extends Application {
     private final World world = new World();
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
     private Pane gameWindow = new Pane();
+    private Text destroyedAsteroids;
+    private Text playerLives;
     
 
     public static void main(String[] args) {
@@ -35,11 +39,17 @@ public class Main extends Application {
 
     @Override
     public void start(Stage window) throws Exception {
-        Text text = new Text(10, 20, "Destroyed asteroids: 0");
+        destroyedAsteroids = new Text(10, 20, "Destroyed asteroids: 0");
+        playerLives = new Text(10,20,"Lives: 3");
+
+        destroyedAsteroids.setFill(javafx.scene.paint.Color.rgb(255,255,255));
+        playerLives.setFill(javafx.scene.paint.Color.rgb(255,255,255));
+
+        VBox vBox = new VBox(5,destroyedAsteroids,playerLives);
+        vBox.setPadding(new Insets(10));
 
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
-        gameWindow.getChildren().add(text);
-
+        gameWindow.getChildren().add(vBox);
 
         Scene scene = new Scene(gameWindow);
         scene.setFill(javafx.scene.paint.Color.rgb(0,0,0)); // Set background color to black

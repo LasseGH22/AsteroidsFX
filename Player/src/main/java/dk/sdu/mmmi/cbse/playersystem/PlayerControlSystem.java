@@ -56,7 +56,16 @@ public class PlayerControlSystem implements IEntityProcessingService {
         }
     }
 
+
+
     private Collection<? extends BulletSPI> getBulletSPIs() {
         return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
+
+    /*
+    private Collection<? extends TextFieldSPI> getTextFieldSPIs() {
+        return ServiceLoader.load(TextFieldSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+     */
 }
