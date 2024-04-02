@@ -98,7 +98,7 @@ public class CollisionDetection implements IPostEntityProcessingService {
         }
     }
 
-    private boolean collidesWith(Entity entity1, Entity entity2) {
+    public boolean collidesWith(Entity entity1, Entity entity2) {
         double distance = Math.sqrt(Math.pow(entity1.getX() - entity2.getX(),2) + Math.pow(entity1.getY() - entity2.getY(),2));
         return distance <= entity1.getBoundingCircleRadius() + entity2.getBoundingCircleRadius();
     }
