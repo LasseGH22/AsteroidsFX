@@ -9,5 +9,13 @@ import dk.sdu.mmmi.cbse.common.data.World;
  * @author corfixen
  */
 public interface BulletSPI {
-    Entity createBullet(Entity e, GameData gameData, World world);
+    /**
+     * Creates a bullet
+     * <p>Differs depending on the shooter of the bullet</p>
+     * @param entity Takes a shooter (Player Or Enemy)
+     * @param gameData
+     * @param world
+     * @return
+     */
+    Entity createBullet(Entity entity, GameData gameData, World world);
 }

@@ -17,8 +17,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-
-
         for (Entity enemy : world.getEntities(Enemy.class)) {
 
             // Right & Left

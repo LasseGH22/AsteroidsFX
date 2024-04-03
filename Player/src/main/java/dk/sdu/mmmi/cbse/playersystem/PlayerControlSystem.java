@@ -6,8 +6,6 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.GameKeys;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.ServiceLoader;
 
@@ -18,11 +16,9 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        movePlayer(gameData,world);
-    }
-
-    public void movePlayer(GameData gameData, World world) {
         for (Entity player : world.getEntities(Player.class)) {
+
+            // Movement for player
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
                 player.setRotation(player.getRotation() - 5);
             }
@@ -42,6 +38,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 }
             }
 
+            //Border control for player
             if (player.getX() < 0) {
                 player.setX(1);
             }
@@ -58,7 +55,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 player.setY(gameData.getDisplayHeight()-1);
             }
 
-
+            // Immunity graphics
             if (player.canCollide()) {
                 player.setRgb(((Player) player).getOriginalRgb());
             } else {
@@ -67,15 +64,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
         }
     }
 
-
     private Collection<? extends BulletSPI> getBulletSPIs() {
         return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
-
-    /*
-    private Collection<? extends TextFieldSPI> getTextFieldSPIs() {
-        return ServiceLoader.load(TextFieldSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
-    }
-
-     */
 }

@@ -35,7 +35,7 @@ public class CollisionDetection implements IPostEntityProcessingService {
                         switch (collisionBuddies) {
                             case ("ASTEROID/ASTEROID"), ("ASTEROID/SPLIT_ASTEROID"), ("SPLIT_ASTEROID/SPLIT_ASTEROID"):
                                 getAsteroidSPIs().stream().findFirst().ifPresent(
-                                        spi -> spi.asteroidBounce((Asteroid) entity, (Asteroid) collisionEntity)
+                                        spi -> spi.asteroidBounce(entity, collisionEntity)
                                 );
 
                                 break;

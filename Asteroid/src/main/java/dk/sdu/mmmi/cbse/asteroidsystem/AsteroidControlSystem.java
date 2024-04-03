@@ -159,7 +159,7 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
             if (i == 0) {
                 asteroid.setRotation(random.nextInt(0,90));
             } else {
-                asteroid.setRotation(splitAsteroids[i-1].getRotation() + random.nextInt(45,90));
+                asteroid.setRotation(splitAsteroids[i-1].getRotation() + random.nextInt(25,90));
             }
 
             asteroid.setTag(EntityTag.SPLIT_ASTEROID);
@@ -175,7 +175,9 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
     }
 
     @Override
-    public void asteroidBounce(Asteroid asteroid1, Asteroid asteroid2) {
+    public void asteroidBounce(Entity entity1, Entity entity2) {
+        Asteroid asteroid1 = (Asteroid) entity1;
+        Asteroid asteroid2 = (Asteroid) entity2;
 
         // Convert rotation and speed to velocity components
         double asteroid1Vx = Math.cos(Math.toRadians(asteroid1.getRotation())) * asteroid1.getSpeed();

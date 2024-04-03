@@ -128,7 +128,7 @@ public class Main extends Application {
 
     private void draw() {
 
-        //Remove entities from gameworld if removed from world map
+        // Remove entities from gameworld if removed from world map
         for (Entity entity : polygons.keySet()) {
             if (!world.getEntities().contains(entity)) {
                 gameWindow.getChildren().remove(polygons.get(entity));
@@ -136,11 +136,11 @@ public class Main extends Application {
             }
         }
 
-        //Draws all polygons in world map
+        // Draws all polygons in world map
         for (Entity entity : world.getEntities()) {
             Polygon polygon = polygons.get(entity);
 
-            //If a bullet does not exist, one is created
+            // If a polygon does not exist, one is created
             if (polygon == null) {
                 polygon = new Polygon(entity.getPolygonCoordinates());
                 polygons.put(entity,polygon);

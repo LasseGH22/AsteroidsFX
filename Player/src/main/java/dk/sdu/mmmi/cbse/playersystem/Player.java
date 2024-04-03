@@ -31,6 +31,7 @@ public class Player extends Entity implements PlayerSPI,PlayerTargetSPI {
         this.setRgb(56, 100, 194);
     }
 
+
     @Override
     public void resetPlayer(Entity entity,GameData gameData) {
         Player player = (Player) entity;
@@ -46,7 +47,6 @@ public class Player extends Entity implements PlayerSPI,PlayerTargetSPI {
     public void removeLife(Entity entity) {
         Player player = (Player) entity;
         player.setLives(player.getLives() - 1);
-        System.out.println("Lives left: " + player.getLives());
 
         if (player.getLives() < 1) {
             Platform.exit();

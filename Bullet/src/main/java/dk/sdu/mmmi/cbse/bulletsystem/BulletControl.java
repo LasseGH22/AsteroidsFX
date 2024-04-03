@@ -7,6 +7,7 @@ import dk.sdu.mmmi.cbse.common.data.EntityTag;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.playersystem.Player;
 import dk.sdu.mmmi.cbse.playersystem.PlayerTargetSPI;
 
 import java.util.Arrays;
@@ -40,8 +41,8 @@ public class BulletControl implements IEntityProcessingService, BulletSPI {
         setShape(bullet);
         bullet.setX(shooter.getX());
         bullet.setY(shooter.getY());
-        int[] color = shooter.getRgb();
-        bullet.setRgb(color[0],color[1],color[2]);
+        int[] color;
+
 
         EntityTag shooterTag = shooter.getTag();
         switch (shooterTag) {
@@ -49,6 +50,8 @@ public class BulletControl implements IEntityProcessingService, BulletSPI {
             case ENEMY:
                 bullet.setRotation(shooter.getRotation());
                 bullet.setTag(EntityTag.ENEMY_BULLET);
+                color = shooter.getRgb();
+                bullet.setRgb(color[0],color[1],color[2]);
 
                 getPlayerTargetSPIs().stream().findFirst().ifPresent(
                         spi -> {
@@ -62,6 +65,8 @@ public class BulletControl implements IEntityProcessingService, BulletSPI {
             case PLAYER:
                 bullet.setRotation(shooter.getRotation());
                 bullet.setTag(EntityTag.PLAYER_BULLET);
+                color = ((Player) shooter).getOriginalRgb();
+                bullet.setRgb(color[0],color[1],color[2]);
                 break;
         }
 
