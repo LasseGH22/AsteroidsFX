@@ -5,7 +5,10 @@ import dk.sdu.mmmi.cbse.common.data.EntityTag;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
-public class EnemyPlugin implements IGamePluginService {
+
+import java.util.Random;
+
+public class EnemyPlugin implements IGamePluginService, EnemySPI {
 
     private Entity enemy;
 
@@ -29,8 +32,7 @@ public class EnemyPlugin implements IGamePluginService {
         enemyShip.setPolygonCoordinates(12, -1, 8, -1, 8, -3, 6, -3, 6, -5, -2, -5, -2, -7, 0, -7, 0, -9, -10, -9, -10, -5, -8, -5, -8, -3, -6, -3, -6, -1, -10, -1, -10, 1, -6, 1, -6, 3, -8, 3, -8, 5, -10, 5, -10, 9, 0, 9, 0, 7, -2, 7, -2, 5, 2, 5, 2, 1, 4, 1, 4, -1, 2, -1, 2, -3, 4, -3, 4, -1, 6, -1, 6, 1, 4, 1, 4, 3, 2, 3, 2, 5, 6, 5, 6, 3, 8, 3, 8, 1, 12, 1);
 
         // Sets spawn coordinates
-        enemyShip.setX(gameData.getDisplayHeight()/2);
-        enemyShip.setY(gameData.getDisplayWidth()/2);
+        resetEnemy(enemyShip,gameData);
 
         enemyShip.setBoundingCircleRadius(15);
 
@@ -47,5 +49,45 @@ public class EnemyPlugin implements IGamePluginService {
     public void stop(GameData gameData, World world) {
         // Remove entities
         world.removeEntity(enemy);
+    }
+
+    @Override
+    public void resetEnemy(Entity entity, GameData gameData) {
+        Enemy enemy = (Enemy) entity;
+        Random random = new Random();
+
+        int chooser = random.nextInt(5);
+        int fourthX = gameData.getDisplayWidth() / 4;
+        int fourthY = gameData.getDisplayHeight() / 4;
+
+        switch (chooser) {
+
+            // Bottom Left
+            case 1:
+                enemy.setX(fourthX);
+                enemy.setY(fourthY * 3);
+                break;
+
+            // Bottom Right
+            case 2:
+                enemy.setX(fourthX * 3);
+                enemy.setY(fourthY * 3);
+                break;
+
+            // Top Left
+            case 3:
+                enemy.setX(fourthX);
+                enemy.setY(fourthY);
+                break;
+
+            // Top Right
+            case 4:
+                enemy.setX(fourthX * 3);
+                enemy.setY(fourthY);
+                break;
+        }
+
+        enemy.setImmunityFrames(3000);
+        enemy.markCollision();
     }
 }

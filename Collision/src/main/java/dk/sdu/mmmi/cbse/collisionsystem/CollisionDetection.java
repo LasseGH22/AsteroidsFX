@@ -8,7 +8,6 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.mmmi.cbse.enemysystem.EnemySPI;
-import dk.sdu.mmmi.cbse.playersystem.Player;
 import dk.sdu.mmmi.cbse.playersystem.PlayerSPI;
 import dk.sdu.mmmi.cbse.playersystem.PlayerTargetSPI;
 
@@ -30,7 +29,6 @@ public class CollisionDetection implements IPostEntityProcessingService {
 
                 if (collidesWith(entity,collisionEntity)) {
                     if (entity.canCollide() && collisionEntity.canCollide()) {
-                        boolean successfulCollision = false;
 
                         String collisionBuddies = entity.getTag().toString() + "/" + collisionEntity.getTag().toString();
 

@@ -9,5 +9,5 @@ module Enemy {
     uses dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
     provides IGamePluginService with dk.sdu.mmmi.cbse.enemysystem.EnemyPlugin;
     provides IEntityProcessingService with dk.sdu.mmmi.cbse.enemysystem.EnemyControlSystem;
-    provides EnemySPI with dk.sdu.mmmi.cbse.enemysystem.Enemy;
+    provides EnemySPI with dk.sdu.mmmi.cbse.enemysystem.EnemyPlugin;
 }

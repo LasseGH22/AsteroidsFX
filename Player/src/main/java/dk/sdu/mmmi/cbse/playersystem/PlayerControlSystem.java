@@ -7,6 +7,7 @@ import dk.sdu.mmmi.cbse.common.data.GameKeys;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.ServiceLoader;
 
@@ -55,6 +56,13 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
             if (player.getY() > gameData.getDisplayHeight()) {
                 player.setY(gameData.getDisplayHeight()-1);
+            }
+
+
+            if (player.canCollide()) {
+                player.setRgb(((Player) player).getOriginalRgb());
+            } else {
+                player.setRgb(((Player) player).getCollisionRgb());
             }
         }
     }

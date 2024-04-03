@@ -22,7 +22,6 @@ public class Entity implements Serializable {
         return ID.toString();
     }
 
-
     public void setPolygonCoordinates(double... coordinates ) {
         this.polygonCoordinates = coordinates;
     }
@@ -30,10 +29,9 @@ public class Entity implements Serializable {
     public double[] getPolygonCoordinates() {
         return polygonCoordinates;
     }
-       
 
     public void setX(double x) {
-        this.x =x;
+        this.x = x;
     }
 
     public double getX() {
@@ -65,6 +63,12 @@ public class Entity implements Serializable {
         this.rgb[0] = red;
         this.rgb[1] = green;
         this.rgb[2] = blue;
+    }
+
+    public void setRgb(int[] rgb) {
+        this.rgb[0] = rgb[0];
+        this.rgb[1] = rgb[1];
+        this.rgb[2] = rgb[2];
     }
 
     public int getRadius() {

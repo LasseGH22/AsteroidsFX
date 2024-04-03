@@ -16,6 +16,9 @@ public class Player extends Entity implements PlayerSPI,PlayerTargetSPI {
 
     private int lives;
 
+    private final int[] originalRgb = new int[] {56, 100, 194};
+    private final int[] collisionRgb = new int[] {228, 242, 22};
+
     public int getLives() {
         return lives;
     }
@@ -24,11 +27,16 @@ public class Player extends Entity implements PlayerSPI,PlayerTargetSPI {
         this.lives = lives;
     }
 
+    public Player() {
+        this.setRgb(56, 100, 194);
+    }
+
     @Override
     public void resetPlayer(Entity entity,GameData gameData) {
         Player player = (Player) entity;
         player.setX((double) gameData.getDisplayWidth() / 2);
         player.setY((double) gameData.getDisplayHeight() / 2);
+        player.setRotation(new Random().nextInt(360));
 
         player.setImmunityFrames(3000);
         player.markCollision();
@@ -37,10 +45,8 @@ public class Player extends Entity implements PlayerSPI,PlayerTargetSPI {
     @Override
     public void removeLife(Entity entity) {
         Player player = (Player) entity;
-        Random random = new Random();
         player.setLives(player.getLives() - 1);
-        player.setRotation(random.nextInt(360));
-        System.out.println(player.getLives());
+        System.out.println("Lives left: " + player.getLives());
 
         if (player.getLives() < 1) {
             Platform.exit();
@@ -56,5 +62,13 @@ public class Player extends Entity implements PlayerSPI,PlayerTargetSPI {
         }
 
         return coords;
+    }
+
+    public int[] getOriginalRgb() {
+        return originalRgb;
+    }
+
+    public int[] getCollisionRgb() {
+        return collisionRgb;
     }
 }

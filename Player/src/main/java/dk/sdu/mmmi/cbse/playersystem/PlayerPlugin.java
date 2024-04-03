@@ -35,8 +35,6 @@ public class PlayerPlugin implements IGamePluginService {
         playerShip.setBoundingCircleRadius(15);
 
         playerShip.setLives(3);
-        // Sets color
-        playerShip.setRgb(56, 100, 194);
 
         // Sets Tag
         playerShip.setTag(EntityTag.PLAYER);
