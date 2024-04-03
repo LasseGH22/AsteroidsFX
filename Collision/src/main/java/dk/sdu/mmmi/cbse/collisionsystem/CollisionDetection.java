@@ -7,6 +7,7 @@ import dk.sdu.mmmi.cbse.common.data.EntityTag;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+import dk.sdu.mmmi.cbse.enemysystem.EnemySPI;
 import dk.sdu.mmmi.cbse.playersystem.Player;
 import dk.sdu.mmmi.cbse.playersystem.PlayerSPI;
 import dk.sdu.mmmi.cbse.playersystem.PlayerTargetSPI;
@@ -85,7 +86,19 @@ public class CollisionDetection implements IPostEntityProcessingService {
 
 
                             case ("ENEMY/ASTEROID"):
-                                // Logic for Enemy & Asteroid Collision
+                                getEnemySPIs().stream().findFirst().ifPresent(
+                                        spi -> {
+                                            spi.resetEnemy(entity,gameData);
+                                        }
+                                );
+
+                                world.removeEntity(collisionEntity);
+                                if (collisionEntity.getTag().equals(EntityTag.ASTEROID)) {
+                                    getAsteroidSPIs().stream().findFirst().ifPresent(
+                                            spi -> spi.asteroidSplit(collisionEntity,world)
+                                    );
+                                }
+
                                 break;
 
                             case ("ENEMY_BULLET/ASTEROID"):
@@ -96,21 +109,35 @@ public class CollisionDetection implements IPostEntityProcessingService {
                                             collisionEntity.setRotation(Math.toDegrees(Math.atan2(playerCoords[1] - collisionEntity.getY(), playerCoords[0] - collisionEntity.getX())));
                                         }
                                 );
+
                                 break;
 
                             case ("ENEMY/PLAYER_BULLET"):
-                                // Logic for Enemy & Player Bullet Collision
+                                world.removeEntity(collisionEntity);
+
+                                getEnemySPIs().stream().findFirst().ifPresent(
+                                        spi -> {
+                                            spi.resetEnemy(entity,gameData);
+                                        }
+                                );
+
                                 break;
 
                             case ("PLAYER/ENEMY"):
-                                // Logic for Player & Enemy Collision
+                                getPlayerSPIs().stream().findFirst().ifPresent(
+                                        spi -> {
+                                            spi.removeLife(entity);
+                                            spi.resetPlayer(entity,gameData);
+                                        }
+                                );
+
+                                getEnemySPIs().stream().findFirst().ifPresent(
+                                        spi -> {
+                                            spi.resetEnemy(collisionEntity,gameData);
+                                        }
+                                );
                                 break;
 
-                        }
-
-                        if (successfulCollision) {
-                            entity.markCollision();
-                            collisionEntity.markCollision();
                         }
                     }
                 }
@@ -133,5 +160,9 @@ public class CollisionDetection implements IPostEntityProcessingService {
 
     private Collection<? extends PlayerTargetSPI> getPlayerTargetSPIs() {
         return ServiceLoader.load(PlayerTargetSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    private Collection<? extends EnemySPI> getEnemySPIs() {
+        return ServiceLoader.load(EnemySPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }
