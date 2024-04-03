@@ -32,6 +32,7 @@ public class PlayerPlugin implements IGamePluginService {
         playerShip.setX(gameData.getDisplayHeight()/2);
         playerShip.setY(gameData.getDisplayWidth()/2);
 
+        playerShip.setBoundingCircleRadius(15);
 
         playerShip.setLives(3);
         // Sets color

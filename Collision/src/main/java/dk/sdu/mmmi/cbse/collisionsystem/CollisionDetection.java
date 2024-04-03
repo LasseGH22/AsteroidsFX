@@ -9,6 +9,7 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.mmmi.cbse.playersystem.Player;
 import dk.sdu.mmmi.cbse.playersystem.PlayerSPI;
+import dk.sdu.mmmi.cbse.playersystem.PlayerTargetSPI;
 
 
 import java.util.Collection;
@@ -38,10 +39,10 @@ public class CollisionDetection implements IPostEntityProcessingService {
                                         spi -> spi.asteroidBounce((Asteroid) entity, (Asteroid) collisionEntity)
                                 );
 
-                                successfulCollision = true;
                                 break;
 
                             case ("PLAYER/ASTEROID"):
+                                // Player loses 1 life and resets to center
                                 getPlayerSPIs().stream().findFirst().ifPresent(
                                         spi -> {
                                             spi.removeLife(entity);
@@ -49,7 +50,14 @@ public class CollisionDetection implements IPostEntityProcessingService {
                                         }
                                 );
 
-                                successfulCollision = true;
+                                // Asteroid gets removed and splits
+                                world.removeEntity(collisionEntity);
+                                if (collisionEntity.getTag().equals(EntityTag.ASTEROID)) {
+                                    getAsteroidSPIs().stream().findFirst().ifPresent(
+                                            spi -> spi.asteroidSplit(collisionEntity,world)
+                                    );
+                                }
+
                                 break;
 
                             case ("PLAYER_BULLET/ASTEROID"), ("PLAYER_BULLET/SPLIT_ASTEROID"):
@@ -62,11 +70,17 @@ public class CollisionDetection implements IPostEntityProcessingService {
                                     );
                                 }
 
-                                successfulCollision = true;
                                 break;
 
                             case ("PLAYER/ENEMY_BULLET"):
-                                // Logic for Player & Enemy Bullet Collision
+                                world.removeEntity(collisionEntity);
+                                getPlayerSPIs().stream().findFirst().ifPresent(
+                                        spi -> {
+                                            spi.removeLife(entity);
+                                            spi.resetPlayer(entity,gameData);
+                                        }
+                                );
+
                                 break;
 
 
@@ -75,7 +89,13 @@ public class CollisionDetection implements IPostEntityProcessingService {
                                 break;
 
                             case ("ENEMY_BULLET/ASTEROID"):
-                                // Logic for Enemy Bullet & Asteroid Collision
+                                world.removeEntity(entity);
+                                getPlayerTargetSPIs().stream().findFirst().ifPresent(
+                                        spi -> {
+                                            double[] playerCoords = spi.getPlayerCoords(world);
+                                            collisionEntity.setRotation(Math.toDegrees(Math.atan2(playerCoords[1] - collisionEntity.getY(), playerCoords[0] - collisionEntity.getX())));
+                                        }
+                                );
                                 break;
 
                             case ("ENEMY/PLAYER_BULLET"):
@@ -109,5 +129,9 @@ public class CollisionDetection implements IPostEntityProcessingService {
 
     private Collection<? extends PlayerSPI> getPlayerSPIs() {
         return ServiceLoader.load(PlayerSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    private Collection<? extends PlayerTargetSPI> getPlayerTargetSPIs() {
+        return ServiceLoader.load(PlayerTargetSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }

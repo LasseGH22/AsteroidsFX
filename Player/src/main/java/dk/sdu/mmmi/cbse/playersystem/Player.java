@@ -2,6 +2,7 @@ package dk.sdu.mmmi.cbse.playersystem;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
+import dk.sdu.mmmi.cbse.common.data.World;
 import javafx.application.Application;
 import javafx.application.Platform;
 
@@ -11,7 +12,7 @@ import java.util.Random;
  *
  * @author Emil
  */
-public class Player extends Entity implements PlayerSPI {
+public class Player extends Entity implements PlayerSPI,PlayerTargetSPI {
 
     private int lives;
 
@@ -29,7 +30,7 @@ public class Player extends Entity implements PlayerSPI {
         player.setX((double) gameData.getDisplayWidth() / 2);
         player.setY((double) gameData.getDisplayHeight() / 2);
 
-        player.setImmunityFrames(1000);
+        player.setImmunityFrames(3000);
         player.markCollision();
     }
 
@@ -44,5 +45,16 @@ public class Player extends Entity implements PlayerSPI {
         if (player.getLives() < 1) {
             Platform.exit();
         }
+    }
+
+    @Override
+    public double[] getPlayerCoords(World world) {
+        double[] coords = new double[2];
+        for (Entity entity : world.getEntities(Player.class)) {
+            coords[0] = entity.getX();
+            coords[1] = entity.getY();
+        }
+
+        return coords;
     }
 }

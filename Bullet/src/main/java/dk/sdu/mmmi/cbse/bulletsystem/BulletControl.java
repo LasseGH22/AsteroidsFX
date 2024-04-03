@@ -7,7 +7,9 @@ import dk.sdu.mmmi.cbse.common.data.EntityTag;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.playersystem.PlayerTargetSPI;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.ServiceLoader;
 
@@ -47,11 +49,14 @@ public class BulletControl implements IEntityProcessingService, BulletSPI {
             case ENEMY:
                 bullet.setRotation(shooter.getRotation());
                 bullet.setTag(EntityTag.ENEMY_BULLET);
-                for (Entity player : world.getEntities()) {
-                    if (player.getTag() == EntityTag.PLAYER) {
-                        bullet.setRotation(Math.toDegrees(Math.atan2(player.getY()- bullet.getY(), player.getX()-bullet.getX())));
-                    }
-                }
+
+                getPlayerTargetSPIs().stream().findFirst().ifPresent(
+                        spi -> {
+                            double[] playerCoords = spi.getPlayerCoords(world);
+                            bullet.setRotation(Math.toDegrees(Math.atan2(playerCoords[1] - bullet.getY(), playerCoords[0] - bullet.getX())));
+                        }
+                );
+
                 break;
 
             case PLAYER:
@@ -65,5 +70,9 @@ public class BulletControl implements IEntityProcessingService, BulletSPI {
 
     private void setShape(Entity entity) {
         entity.setPolygonCoordinates(2,0,0,2,-2,0,0,-2);
+    }
+
+    private Collection<? extends PlayerTargetSPI> getPlayerTargetSPIs() {
+        return ServiceLoader.load(PlayerTargetSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }
