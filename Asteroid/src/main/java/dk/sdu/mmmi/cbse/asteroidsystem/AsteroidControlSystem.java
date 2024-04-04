@@ -36,11 +36,6 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
     public Entity createAsteroid(GameData gameData) {
         Asteroid asteroid = new Asteroid();
 
-        // Sets "randomized" speed
-        asteroid.setSpeed(random.nextDouble(0.8,1.2));
-
-        asteroid.setRadius(random.nextInt(15,25));
-
         // Sets semi random shape
         setAsteroidShape(asteroid);
 
@@ -99,12 +94,12 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
         // Calculate points of asteroid
         double[][] points = new double[5][2];
         double maxDistance = 0;
-        double baseRadius = asteroid.getRadius() * 1.5;
+        double baseSize = ((Asteroid) asteroid).getSize() * 1.5;
         for (int i = 0; i < 5; i++) {
             double angle = Math.toRadians(72 * i - 90);
             double offset = random.nextInt(5,10);
-            points[i][0] = baseRadius * Math.cos(angle) + offset;
-            points[i][1] = baseRadius * Math.sin(angle) + offset;
+            points[i][0] = baseSize * Math.cos(angle) + offset;
+            points[i][1] = baseSize * Math.sin(angle) + offset;
 
             // Calculate the furthest point from the center
             double distance = Math.sqrt(Math.pow(points[i][0], 2) + Math.pow(points[i][1], 2));
@@ -144,11 +139,9 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
         Asteroid parentAsteroid = (Asteroid) entity;
         Entity[] splitAsteroids = new Entity[random.nextInt(2,5)];
 
-        System.out.println(splitAsteroids.length);
-
         for (int i = 0; i < splitAsteroids.length; i++) {
             Asteroid asteroid = new Asteroid();
-            asteroid.setRadius(parentAsteroid.getRadius() / 2);
+            asteroid.setSize(parentAsteroid.getSize() / 2);
 
             setAsteroidShape(asteroid);
 

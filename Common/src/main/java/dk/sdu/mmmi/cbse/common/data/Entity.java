@@ -11,7 +11,6 @@ public class Entity implements Serializable {
     private double y;
     private double rotation;
     private int[] rgb = new int[3];
-    private int radius;
     private double boundingCircleRadius;
     private long lastCollisionTime = 0;
     private long immunityFrames = 100;
@@ -69,14 +68,6 @@ public class Entity implements Serializable {
         this.rgb[0] = rgb[0];
         this.rgb[1] = rgb[1];
         this.rgb[2] = rgb[2];
-    }
-
-    public int getRadius() {
-        return radius;
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
     }
 
     public double getBoundingCircleRadius() {
