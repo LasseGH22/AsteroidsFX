@@ -1,15 +1,14 @@
 package dk.sdu.mmmi.cbse.collisionsystem;
 
-import dk.sdu.mmmi.cbse.asteroidsystem.Asteroid;
-import dk.sdu.mmmi.cbse.asteroidsystem.AsteroidSPI;
+import dk.sdu.mmmi.cbse.CommonAsteroid.AsteroidSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.EntityTag;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
-import dk.sdu.mmmi.cbse.enemysystem.EnemySPI;
-import dk.sdu.mmmi.cbse.playersystem.PlayerSPI;
-import dk.sdu.mmmi.cbse.playersystem.PlayerTargetSPI;
+import dk.sdu.mmmi.cbse.CommonEnemy.EnemySPI;
+import dk.sdu.mmmi.cbse.CommonPlayer.PlayerSPI;
+import dk.sdu.mmmi.cbse.CommonPlayer.PlayerTargetSPI;
 
 
 import java.util.Collection;

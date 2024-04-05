@@ -7,10 +7,9 @@ import dk.sdu.mmmi.cbse.common.data.EntityTag;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-import dk.sdu.mmmi.cbse.playersystem.Player;
-import dk.sdu.mmmi.cbse.playersystem.PlayerTargetSPI;
+import dk.sdu.mmmi.cbse.CommonPlayer.Player;
+import dk.sdu.mmmi.cbse.CommonPlayer.PlayerTargetSPI;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.ServiceLoader;
 
