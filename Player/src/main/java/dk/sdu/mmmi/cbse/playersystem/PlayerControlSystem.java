@@ -1,7 +1,7 @@
 package dk.sdu.mmmi.cbse.playersystem;
 
 import dk.sdu.mmmi.cbse.CommonPlayer.Player;
-import dk.sdu.mmmi.cbse.CommonPlayer.PlayerSPI;
+import dk.sdu.mmmi.cbse.CommonPlayer.PlayerCollisionSPI;
 import dk.sdu.mmmi.cbse.CommonPlayer.PlayerTargetSPI;
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
@@ -18,7 +18,7 @@ import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
 
 
-public class PlayerControlSystem implements IEntityProcessingService, PlayerSPI, PlayerTargetSPI {
+public class PlayerControlSystem implements IEntityProcessingService, PlayerCollisionSPI, PlayerTargetSPI {
 
     @Override
     public void process(GameData gameData, World world) {

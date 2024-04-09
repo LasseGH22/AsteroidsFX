@@ -7,7 +7,7 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.mmmi.cbse.CommonEnemy.EnemySPI;
-import dk.sdu.mmmi.cbse.CommonPlayer.PlayerSPI;
+import dk.sdu.mmmi.cbse.CommonPlayer.PlayerCollisionSPI;
 import dk.sdu.mmmi.cbse.CommonPlayer.PlayerTargetSPI;
 
 
@@ -151,8 +151,8 @@ public class CollisionDetection implements IPostEntityProcessingService {
         return ServiceLoader.load(AsteroidSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 
-    private Collection<? extends PlayerSPI> getPlayerSPIs() {
-        return ServiceLoader.load(PlayerSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    private Collection<? extends PlayerCollisionSPI> getPlayerSPIs() {
+        return ServiceLoader.load(PlayerCollisionSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 
     private Collection<? extends PlayerTargetSPI> getPlayerTargetSPIs() {
