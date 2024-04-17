@@ -10,6 +10,11 @@ import dk.sdu.mmmi.cbse.CommonEnemy.EnemySPI;
 import dk.sdu.mmmi.cbse.CommonPlayer.PlayerCollisionSPI;
 import dk.sdu.mmmi.cbse.CommonPlayer.PlayerTargetSPI;
 
+import java.io.IOException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
 
 import java.util.Collection;
 import java.util.ServiceLoader;
@@ -30,6 +35,8 @@ public class CollisionDetection implements IPostEntityProcessingService {
                     if (entity.canCollide() && collisionEntity.canCollide()) {
 
                         String collisionBuddies = entity.getTag().toString() + "/" + collisionEntity.getTag().toString();
+                        int scoreAdd = 0;
+                        boolean scoreUpdate = false;
 
                         switch (collisionBuddies) {
                             case ("ASTEROID/ASTEROID"), ("ASTEROID/SPLIT_ASTEROID"), ("SPLIT_ASTEROID/SPLIT_ASTEROID"):
@@ -43,7 +50,7 @@ public class CollisionDetection implements IPostEntityProcessingService {
                                 // Player loses 1 life and resets to center
                                 getPlayerSPIs().stream().findFirst().ifPresent(
                                         spi -> {
-                                            spi.removeLife(entity);
+                                            //spi.removeLife(entity);
                                             spi.resetPlayer(entity,gameData);
                                         }
                                 );
@@ -68,13 +75,15 @@ public class CollisionDetection implements IPostEntityProcessingService {
                                     );
                                 }
 
+                                scoreUpdate = true;
+                                scoreAdd = 10;
                                 break;
 
                             case ("PLAYER/ENEMY_BULLET"):
                                 world.removeEntity(collisionEntity);
                                 getPlayerSPIs().stream().findFirst().ifPresent(
                                         spi -> {
-                                            spi.removeLife(entity);
+                                            //spi.removeLife(entity);
                                             spi.resetPlayer(entity,gameData);
                                         }
                                 );
@@ -118,12 +127,14 @@ public class CollisionDetection implements IPostEntityProcessingService {
                                         }
                                 );
 
+                                scoreUpdate = true;
+                                scoreAdd = 50;
                                 break;
 
                             case ("PLAYER/ENEMY"):
                                 getPlayerSPIs().stream().findFirst().ifPresent(
                                         spi -> {
-                                            spi.removeLife(entity);
+                                            //spi.removeLife(entity);
                                             spi.resetPlayer(entity,gameData);
                                         }
                                 );
@@ -135,6 +146,21 @@ public class CollisionDetection implements IPostEntityProcessingService {
                                 );
                                 break;
 
+                        }
+
+                        if (scoreUpdate) {
+                            HttpClient httpClient = HttpClient.newHttpClient();
+                            HttpRequest request = HttpRequest.newBuilder()
+                                    .uri(URI.create("http://localhost:8080/score/update/" + scoreAdd))
+                                    .PUT(HttpRequest.BodyPublishers.ofString(""))
+                                    .build();
+
+                            try {
+                                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                                System.out.println(response.body());
+                            } catch (IOException | InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
