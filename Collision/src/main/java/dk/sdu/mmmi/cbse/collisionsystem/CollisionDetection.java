@@ -22,6 +22,8 @@ import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
 
 public class CollisionDetection implements IPostEntityProcessingService {
+    HttpClient httpClient = HttpClient.newHttpClient();
+
     @Override
     public void process(GameData gameData, World world) {
         for (Entity entity : world.getEntities()) {
@@ -35,8 +37,10 @@ public class CollisionDetection implements IPostEntityProcessingService {
                     if (entity.canCollide() && collisionEntity.canCollide()) {
 
                         String collisionBuddies = entity.getTag().toString() + "/" + collisionEntity.getTag().toString();
+
                         int scoreAdd = 0;
                         boolean scoreUpdate = false;
+                        boolean playerLivesUpdate = false;
 
                         switch (collisionBuddies) {
                             case ("ASTEROID/ASTEROID"), ("ASTEROID/SPLIT_ASTEROID"), ("SPLIT_ASTEROID/SPLIT_ASTEROID"):
@@ -54,6 +58,7 @@ public class CollisionDetection implements IPostEntityProcessingService {
                                             spi.resetPlayer(entity,gameData);
                                         }
                                 );
+                                playerLivesUpdate = true;
 
                                 // Asteroid gets removed and splits
                                 world.removeEntity(collisionEntity);
@@ -88,6 +93,7 @@ public class CollisionDetection implements IPostEntityProcessingService {
                                         }
                                 );
 
+                                playerLivesUpdate = true;
                                 break;
 
 
@@ -138,6 +144,7 @@ public class CollisionDetection implements IPostEntityProcessingService {
                                             spi.resetPlayer(entity,gameData);
                                         }
                                 );
+                                playerLivesUpdate = true;
 
                                 getEnemySPIs().stream().findFirst().ifPresent(
                                         spi -> {
@@ -148,16 +155,25 @@ public class CollisionDetection implements IPostEntityProcessingService {
 
                         }
 
-                        if (scoreUpdate) {
-                            HttpClient httpClient = HttpClient.newHttpClient();
+                        if (playerLivesUpdate) {
                             HttpRequest request = HttpRequest.newBuilder()
-                                    .uri(URI.create("http://localhost:8080/score/update/" + scoreAdd))
+                                    .uri(URI.create("http://localhost:8080/attributes/lives/decrement/1"))
                                     .PUT(HttpRequest.BodyPublishers.ofString(""))
                                     .build();
-
                             try {
                                 HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-                                System.out.println(response.body());
+                            } catch (IOException | InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        if (scoreUpdate) {
+                            HttpRequest request = HttpRequest.newBuilder()
+                                    .uri(URI.create("http://localhost:8080/attributes/score/update/" + scoreAdd))
+                                    .PUT(HttpRequest.BodyPublishers.ofString(""))
+                                    .build();
+                            try {
+                                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
                             } catch (IOException | InterruptedException e) {
                                 e.printStackTrace();
                             }

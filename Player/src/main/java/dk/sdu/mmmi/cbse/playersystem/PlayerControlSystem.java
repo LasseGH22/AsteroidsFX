@@ -81,6 +81,7 @@ public class PlayerControlSystem implements IEntityProcessingService, PlayerColl
         player.markCollision();
     }
 
+    /*
     @Override
     public void removeLife(Entity entity) {
         Player player = (Player) entity;
@@ -90,6 +91,8 @@ public class PlayerControlSystem implements IEntityProcessingService, PlayerColl
             Platform.exit();
         }
     }
+
+     */
 
     @Override
     public double[] getPlayerCoords(World world) {

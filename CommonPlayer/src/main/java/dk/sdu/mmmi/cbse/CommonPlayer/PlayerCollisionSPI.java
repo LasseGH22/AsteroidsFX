@@ -18,5 +18,5 @@ public interface PlayerCollisionSPI {
      * </p>
      * @param entity Takes entity (Player)
      */
-    void removeLife(Entity entity);
+    //void removeLife(Entity entity);
 }

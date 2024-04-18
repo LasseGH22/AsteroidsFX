@@ -36,9 +36,6 @@ public class PlayerPlugin implements IGamePluginService {
         // Sets bounding circle for collision
         playerShip.setBoundingCircleRadius(15);
 
-        // Sets players lives
-        playerShip.setLives(3);
-
         // Sets Tag
         playerShip.setTag(EntityTag.PLAYER);
 

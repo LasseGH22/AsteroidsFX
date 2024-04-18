@@ -7,13 +7,18 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
-import java.util.Collection;
-import java.util.Map;
-import java.util.ServiceLoader;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import static java.util.stream.Collectors.toList;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -29,23 +34,24 @@ public class Main extends Application {
     private final World world = new World();
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
     private Pane gameWindow = new Pane();
-    private Text destroyedAsteroids;
-    private Text playerLives;
+    private final Text scoreText = new Text("Score: 0");
+    private final Text playerLivesText = new Text("Lives: 3");
     
 
     public static void main(String[] args) {
         launch(Main.class);
     }
 
+
     @Override
     public void start(Stage window) throws Exception {
-        destroyedAsteroids = new Text(10, 20, "Destroyed asteroids: 0");
-        playerLives = new Text(10,20,"Lives: 3");
+        timer.scheduleAtFixedRate(task, 0, 500);
+        Platform.setImplicitExit(true);
 
-        destroyedAsteroids.setFill(javafx.scene.paint.Color.rgb(255,255,255));
-        playerLives.setFill(javafx.scene.paint.Color.rgb(255,255,255));
+        scoreText.setFill(javafx.scene.paint.Color.rgb(255,255,255));
+        playerLivesText.setFill(javafx.scene.paint.Color.rgb(255,255,255));
 
-        VBox vBox = new VBox(5,destroyedAsteroids,playerLives);
+        VBox vBox = new VBox(5, scoreText, playerLivesText);
         vBox.setPadding(new Insets(10));
 
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
@@ -150,6 +156,47 @@ public class Main extends Application {
             polygon.setTranslateX(entity.getX());
             polygon.setTranslateY(entity.getY());
             polygon.setRotate(entity.getRotation());
+        }
+    }
+
+    Timer timer = new Timer();
+    TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+            updateScoreText();
+            updateLives();
+        }
+    };
+
+    private void updateScoreText() {
+        System.out.println();
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                                .uri(URI.create("http://localhost:8080/attributes/score"))
+                                .GET().build();
+
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            scoreText.setText("Score: " + response.body());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateLives() {
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                                .uri(URI.create("http://localhost:8080/attributes/lives"))
+                                .GET().build();
+
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.body().equals("0")) {
+                Platform.exit();
+            }
+            playerLivesText.setText("Lives: " + response.body());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
