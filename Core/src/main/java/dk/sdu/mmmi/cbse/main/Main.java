@@ -179,7 +179,7 @@ public class Main extends Application {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             scoreText.setText("Score: " + response.body());
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -196,7 +196,7 @@ public class Main extends Application {
             }
             playerLivesText.setText("Lives: " + response.body());
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+
         }
     }
 

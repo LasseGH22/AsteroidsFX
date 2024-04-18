@@ -50,11 +50,10 @@ public class CollisionDetection implements IPostEntityProcessingService {
 
                                 break;
 
-                            case ("PLAYER/ASTEROID"):
+                            case ("PLAYER/ASTEROID"), ("PLAYER/SPLIT_ASTEROID"):
                                 // Player loses 1 life and resets to center
                                 getPlayerSPIs().stream().findFirst().ifPresent(
                                         spi -> {
-                                            //spi.removeLife(entity);
                                             spi.resetPlayer(entity,gameData);
                                         }
                                 );
@@ -88,7 +87,6 @@ public class CollisionDetection implements IPostEntityProcessingService {
                                 world.removeEntity(collisionEntity);
                                 getPlayerSPIs().stream().findFirst().ifPresent(
                                         spi -> {
-                                            //spi.removeLife(entity);
                                             spi.resetPlayer(entity,gameData);
                                         }
                                 );
@@ -140,7 +138,6 @@ public class CollisionDetection implements IPostEntityProcessingService {
                             case ("PLAYER/ENEMY"):
                                 getPlayerSPIs().stream().findFirst().ifPresent(
                                         spi -> {
-                                            //spi.removeLife(entity);
                                             spi.resetPlayer(entity,gameData);
                                         }
                                 );
@@ -163,7 +160,7 @@ public class CollisionDetection implements IPostEntityProcessingService {
                             try {
                                 HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
                             } catch (IOException | InterruptedException e) {
-                                e.printStackTrace();
+
                             }
                         }
 
@@ -175,7 +172,7 @@ public class CollisionDetection implements IPostEntityProcessingService {
                             try {
                                 HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
                             } catch (IOException | InterruptedException e) {
-                                e.printStackTrace();
+
                             }
                         }
                     }

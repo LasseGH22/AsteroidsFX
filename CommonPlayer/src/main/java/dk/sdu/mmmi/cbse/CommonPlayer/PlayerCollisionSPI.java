@@ -10,13 +10,4 @@ public interface PlayerCollisionSPI {
      * @param gameData Uses gamedata for display width & height
      */
     void resetPlayer(Entity entity, GameData gameData);
-
-    /**
-     * Removes 1 life from player
-     * <p>
-     *     If lives go below 1, the application is terminated
-     * </p>
-     * @param entity Takes entity (Player)
-     */
-    //void removeLife(Entity entity);
 }

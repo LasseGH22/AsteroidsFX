@@ -147,6 +147,8 @@ public class AsteroidControlSystem implements IEntityProcessingService, Asteroid
 
             setAsteroidShape(asteroid);
 
+            asteroid.setBoundingCircleRadius(parentAsteroid.getBoundingCircleRadius() / 2);
+
             asteroid.setSpeed(parentAsteroid.getSpeed());
 
             asteroid.setX(parentAsteroid.getX());
